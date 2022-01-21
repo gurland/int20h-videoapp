@@ -1,0 +1,73 @@
+
+.card-wrap {
+  display: flex;
+  margin: 0 -15px;
+  // flex-wrap: wrap;
+
+  .room-card {
+    background: white;
+    display: flex;
+    flex-direction: column;
+    border-radius: 15px;
+    padding: 15px;
+    margin: 0 15px;
+    width: 33%;
+    min-height: 200px;
+    cursor: pointer;
+    transition: box-shadow .2s ease-in-out;
+
+    // @include for_breakpoint(tablet) {
+    //   width: 50%;
+    // }
+    // @include for_breakpoint(mobile) {
+    //   width: 100%;
+    // }
+    &:hover {
+      box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      h3 {
+        margin: 0;
+        font-size: 25px;
+      }
+    }
+    .content {
+      .description {
+
+      }
+      .user-wrap {
+        display: flex;
+        margin: 0 13px 15px;
+
+        img {
+          width: 30px;
+          height: 30px;
+          border-radius: 50%;
+          border: 3px solid white;
+          margin-left: -15px;
+        }
+      }
+    }
+    .footer {
+      height: 100%;
+      display: flex;
+      align-items: flex-end;
+      justify-content: flex-end;
+
+      .status {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+
+        .MuiSvgIcon-root {
+          margin-left: 5px;
+        }
+      }
+    }
+  }
+}
