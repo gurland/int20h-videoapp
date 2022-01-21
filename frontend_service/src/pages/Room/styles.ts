@@ -6,6 +6,8 @@ export const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
         maxWidth: 360,
         cursor: 'pointer',
+        margin: 'auto',
+        marginBottom: theme.spacing(4),
     },
     usersWrapper: {
         display: 'flex',
