@@ -1,89 +1,88 @@
-
 .cards-wrap {
-  display: flex;
-  margin: 0 -15px;
-  flex-wrap: wrap;
-  transition: margin .2s ease-in-out;
-
-  @media screen and (max-width: 991px) {
-    margin: 0 -7.5px;
-  }
-  .room-card {
-    width: 33.33%;
-    transition: width .2s ease-in-out;
+    display: flex;
+    margin: 0 -15px;
+    flex-wrap: wrap;
+    transition: margin 0.2s ease-in-out;
 
     @media screen and (max-width: 991px) {
-      width: 50%;
+        margin: 0 -7.5px;
     }
-    @media screen and (max-width: 667px) {
-      width: 100%;
+    .room-card {
+        width: 33.33%;
+        transition: width 0.2s ease-in-out;
+
+        @media screen and (max-width: 991px) {
+            width: 50%;
+        }
+        @media screen and (max-width: 667px) {
+            width: 100%;
+        }
+
+        .card-wrap {
+            background: white;
+            display: flex;
+            flex-direction: column;
+            border-radius: 15px;
+            padding: 15px;
+            margin: 0 15px 30px;
+            height: 200px;
+            cursor: pointer;
+            transition: box-shadow 0.2s ease-in-out;
+
+            @media screen and (max-width: 991px) {
+                margin: 0 7.5px 15px;
+            }
+            &:hover {
+                box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+            }
+            .header {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+
+                h3 {
+                    margin: 0;
+                    font-size: 25px;
+                }
+            }
+            .content {
+                .description {
+                    // overflow: hidden;
+                    // white-space: nowrap;
+                    // text-overflow: ellipsis;
+                    max-height: 70px;
+                    overflow: auto;
+                }
+                .user-wrap {
+                    display: flex;
+                    margin: 0 13px 15px;
+
+                    img {
+                        width: 30px;
+                        height: 30px;
+                        border-radius: 50%;
+                        border: 3px solid white;
+                        margin-left: -15px;
+                    }
+                }
+            }
+            .footer {
+                height: 100%;
+                display: flex;
+                align-items: flex-end;
+                justify-content: flex-end;
+
+                .status {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 14px;
+
+                    .MuiSvgIcon-root {
+                        margin-left: 5px;
+                    }
+                }
+            }
+        }
     }
-
-    .card-wrap {
-      background: white;
-      display: flex;
-      flex-direction: column;
-      border-radius: 15px;
-      padding: 15px;
-      margin: 0 15px 30px;
-      height: 200px;
-      cursor: pointer;
-      transition: box-shadow .2s ease-in-out;
-
-      @media screen and (max-width: 991px) {
-        margin: 0 7.5px 15px;
-      }
-      &:hover {
-        box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-      }
-      .header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-
-        h3 {
-          margin: 0;
-          font-size: 25px;
-        }
-      }
-      .content {
-        .description {
-          // overflow: hidden;
-          // white-space: nowrap;
-          // text-overflow: ellipsis;
-          max-height: 70px;
-          overflow: auto;
-        }
-        .user-wrap {
-          display: flex;
-          margin: 0 13px 15px;
-
-          img {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            border: 3px solid white;
-            margin-left: -15px;
-          }
-        }
-      }
-      .footer {
-        height: 100%;
-        display: flex;
-        align-items: flex-end;
-        justify-content: flex-end;
-
-        .status {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 14px;
-
-          .MuiSvgIcon-root {
-            margin-left: 5px;
-          }
-        }
-      }
-    }
-  }
 }
