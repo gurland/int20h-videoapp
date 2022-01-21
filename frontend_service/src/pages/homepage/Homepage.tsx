@@ -2,9 +2,10 @@ import React from 'react';
 import './Homepage.scss';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import PersonIcon from '@mui/icons-material/Person';
+import { Room } from '../../types/Room';
 
 function Homepage() {
-    const rooms = [
+    const rooms: Room[] = [
         {
             id: 1,
             maxUsers: 10,
