@@ -1,10 +1,10 @@
 import React from 'react';
 import { Routes as BrowserRoutes, Route, Navigate } from 'react-router-dom';
 import { Routes } from './constants/routes';
-import Homepage from './pages/homepage/Homepage';
-import Room from './pages/Room/Room';
+import Homepage from './pages/Homepage';
+import RoomPage from './pages/RoomPage';
 import './App.scss';
-import Header from './components/header/Header';
+import Header from './components/Header';
 
 function App() {
     return (
@@ -13,7 +13,7 @@ function App() {
             <div className="app-content">
                 <BrowserRoutes>
                     <Route path={Routes.Homepage} element={<Homepage />} />
-                    <Route path={Routes.Room} element={<Room />} />
+                    <Route path={Routes.Room} element={<RoomPage />} />
                     <Route path="*" element={<Navigate to={Routes.Homepage} />} />
                 </BrowserRoutes>
             </div>
