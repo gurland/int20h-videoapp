@@ -1,7 +1,6 @@
 body {
     margin: 0;
     background: rgb(241, 241, 241);
-    font-family: 'Roboto', sans-serif;
 
     .app {
         width: 100%;
@@ -9,9 +8,6 @@ body {
         flex-direction: column;
         height: 100vh;
 
-        .navbar {
-            height: 60px;
-        }
         .app-content {
             overflow: auto;
             height: calc(100% - 60px);
@@ -19,16 +15,8 @@ body {
             transition: padding 0.2s ease-in-out;
 
             @media screen and (max-width: 991px) {
-                padding: 5px 15px 15px 15px;
+                padding: 5px 15px 30px 15px;
             }
         }
-    }
-
-    .no-style {
-        border: initial;
-        background: initial;
-        outline: initial;
-        padding: 0;
-        cursor: pointer;
     }
 }

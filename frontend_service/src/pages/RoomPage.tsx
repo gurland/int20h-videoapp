@@ -1,8 +1,8 @@
 import React from 'react';
 import { Avatar, Box, Grid, Typography } from '@mui/material';
-import { User } from '../../types/User';
-import CustomCard from '../../components/CustomCard';
-import CallControlsBar from '../../components/CallControlsBar';
+import { User } from '../types/User';
+import CustomCard from '../components/CustomCard';
+import CallControlsBar from '../components/CallControlsBar';
 import { makeStyles } from 'tss-react/mui';
 
 const users: User[] = [
@@ -95,7 +95,7 @@ function RoomPage() {
         <>
             <Grid container spacing={2}>
                 {users.map(({ id, name, profileImage }) => (
-                    <Grid item key={id} xl={3} lg={4} md={6} sm={12}>
+                    <Grid item key={id} xl={3} lg={4} md={6} sm={12} xs={12}>
                         <CustomCard key={id} className={classes.userCard}>
                             <video autoPlay controls muted>
                                 <source src="https://shattereddisk.github.io/rickroll/rickroll.mp4" type="video/mp4" />

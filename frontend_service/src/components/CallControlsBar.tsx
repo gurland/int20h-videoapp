@@ -6,7 +6,7 @@ import VolumeOffIcon from '@mui/icons-material/VolumeOff';
 import VideocamIcon from '@mui/icons-material/Videocam';
 import VideocamOffIcon from '@mui/icons-material/VideocamOff';
 import CallEndIcon from '@mui/icons-material/CallEnd';
-import CustomCard from './CustomCard/CustomCard';
+import CustomCard from './CustomCard';
 import { Box, IconButton } from '@mui/material';
 import { makeStyles } from 'tss-react/mui';
 
@@ -41,6 +41,12 @@ const useStyles = makeStyles()((theme) => ({
         right: 0,
         marginRight: 'auto',
         marginLeft: 'auto',
+        [theme.breakpoints.down(530)]: {
+            width: 'unset',
+            bottom: 0,
+            borderBottomLeftRadius: 0,
+            borderBottomRightRadius: 0,
+        },
     },
     controlsWrapper: {
         display: 'flex',
