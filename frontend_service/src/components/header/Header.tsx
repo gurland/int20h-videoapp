@@ -1,6 +1,7 @@
 import React from 'react';
 import './Header.scss';
 import Brightness1Icon from '@mui/icons-material/Brightness1';
+import Button from '@mui/material/Button';
 
 function Header() {
     return (
@@ -9,7 +10,7 @@ function Header() {
                 <h1>Title</h1>
             </div>
             <div className="group">
-                <Brightness1Icon sx={{ fontSize: 40 }} />
+                <Button variant="contained">Create room</Button>
                 <Brightness1Icon sx={{ fontSize: 40 }} />
             </div>
         </div>

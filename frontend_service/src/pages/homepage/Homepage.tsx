@@ -7,8 +7,10 @@ function Homepage() {
     const rooms = [
         {
             id: 1,
+            maxUsers: 10,
             title: 'Title',
-            description: 'Description',
+            description:
+                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
             userList: [
                 {
                     id: 1,
@@ -26,6 +28,7 @@ function Homepage() {
         },
         {
             id: 2,
+            maxUsers: 10,
             title: 'Title',
             description: 'Description',
             userList: [
@@ -45,6 +48,7 @@ function Homepage() {
         },
         {
             id: 3,
+            maxUsers: 10,
             title: 'Title',
             description: 'Description',
             userList: [
@@ -65,7 +69,7 @@ function Homepage() {
     ];
 
     return (
-        <div className="card-wrap">
+        <div className="cards-wrap">
             {rooms.map((item) => (
                 <div key={item.id} className="room-card">
                     <div className="card-wrap">
@@ -85,8 +89,8 @@ function Homepage() {
                         </div>
                         <div className="footer">
                             <div className="status">
-                                {item.userList.length}
-                                <PersonIcon sx={{ fontSize: 20 }} />
+                                {item.userList.length} / {item.maxUsers}
+                                <PersonIcon sx={{ fontSize: 18 }} />
                             </div>
                         </div>
                     </div>

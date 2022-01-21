@@ -4,6 +4,9 @@
   align-items: center;
   padding: 0 30px;
 
+  @media screen and (max-width: 991px) {
+    padding: 0 15px;
+  }
   .group {
     display: flex;
     align-items: center;
@@ -11,9 +14,13 @@
     h1 {
       margin: 0;
       font-size: 35px;
+
+      @media screen and (max-width: 667px) {
+        display: none;
+      }
     }
-    .MuiSvgIcon-root {
-      padding: auto;
+    .MuiButton-root {
+      margin-right: 10px;
     }
   }
 }
