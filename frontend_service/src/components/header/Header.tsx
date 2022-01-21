@@ -10,7 +10,9 @@ function Header() {
                 <h1>Title</h1>
             </div>
             <div className="group">
-                <Button variant="contained">Create room</Button>
+                <Button variant="contained" disableElevation sx={{ borderRadius: 16 }}>
+                    Create room
+                </Button>
                 <Brightness1Icon sx={{ fontSize: 40 }} />
             </div>
         </div>
