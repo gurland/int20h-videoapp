@@ -1,10 +1,10 @@
 import React from 'react';
 import { Routes as BrowserRoutes, Route, Navigate } from 'react-router-dom';
 import { Routes } from './constants/routes';
-import Homepage from './pages/homepage/Homepage';
+import Homepage from './pages/Homepage/Homepage';
 import RoomPage from './pages/RoomPage/RoomPage';
 import './App.scss';
-import Header from './components/header/Header';
+import Header from './components/Header/Header';
 
 function App() {
     return (
