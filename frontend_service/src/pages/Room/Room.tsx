@@ -1,6 +1,5 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
-import { Box, Typography } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 import { useStyles } from './styles';
 import { User } from '../../types/User';
 import CustomCard from '../../components/CustomCard/CustomCard';
@@ -82,21 +81,22 @@ const users: User[] = [
 ];
 
 function Room() {
-    const { roomId } = useParams();
     const { classes } = useStyles();
 
     return (
         <>
-            <Box className={classes.usersWrapper}>
+            <Grid container spacing={2}>
                 {users.map((item) => (
-                    <CustomCard key={item.id} className={classes.userCard}>
-                        <video autoPlay controls muted>
-                            <source src="https://shattereddisk.github.io/rickroll/rickroll.mp4" type="video/mp4" />
-                        </video>
-                        <Typography mt={1}>{item.name}</Typography>
-                    </CustomCard>
+                    <Grid item key={item.id} xl={3} lg={4} md={6} sm={12}>
+                        <CustomCard key={item.id} className={classes.userCard}>
+                            <video autoPlay controls muted>
+                                <source src="https://shattereddisk.github.io/rickroll/rickroll.mp4" type="video/mp4" />
+                            </video>
+                            <Typography mt={1}>{item.name}</Typography>
+                        </CustomCard>
+                    </Grid>
                 ))}
-            </Box>
+            </Grid>
             <CallControlsBar />
         </>
     );
