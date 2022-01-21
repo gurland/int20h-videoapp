@@ -1,5 +1,5 @@
 import React from 'react';
-import { Paper } from '@mui/material';
+import { Box } from '@mui/material';
 import { makeStyles } from 'tss-react/mui';
 
 interface CustomCardProps extends Record<string, unknown> {
@@ -22,9 +22,9 @@ const useStyles = makeStyles()((theme) => ({
 function CustomCard({ children, className, ...props }: CustomCardProps) {
     const { classes, cx } = useStyles();
     return (
-        <Paper elevation={0} className={cx(classes.root, className)} {...props}>
+        <Box className={cx(classes.root, className)} {...props}>
             {children}
-        </Paper>
+        </Box>
     );
 }
 
