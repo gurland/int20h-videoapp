@@ -23,9 +23,6 @@ jobs:
       - name: Production Build
         run: yarn build
         working-directory: ./frontend_service
-      - name: Unit Tests
-        run: yarn test
-        working-directory: ./frontend_service
       - name: Deploy to S3
         uses: jakejarvis/s3-sync-action@master
         with:
