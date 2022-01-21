@@ -1,9 +1,9 @@
 import React from 'react';
 import { Avatar, Box, Grid, Typography } from '@mui/material';
-import { useStyles } from './styles';
 import { User } from '../../types/User';
-import CustomCard from '../../components/CustomCard/CustomCard';
+import CustomCard from '../../components/CustomCard';
 import CallControlsBar from '../../components/CallControlsBar';
+import { makeStyles } from 'tss-react/mui';
 
 const users: User[] = [
     {
@@ -79,6 +79,14 @@ const users: User[] = [
         name: 'Test test',
     },
 ];
+
+const useStyles = makeStyles()(() => ({
+    userCard: {
+        display: 'flex',
+        flexDirection: 'column',
+        cursor: 'pointer',
+    },
+}));
 
 function RoomPage() {
     const { classes } = useStyles();
