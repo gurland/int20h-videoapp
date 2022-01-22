@@ -12,74 +12,74 @@ const users: User[] = [
         id: 1,
         name: 'Test test',
     },
-    {
-        id: 1,
-        name: 'Test test',
-    },
-    {
-        id: 1,
-        name: 'Test test',
-    },
-    {
-        id: 1,
-        name: 'Test test',
-    },
-    {
-        id: 1,
-        name: 'Test test',
-    },
-    {
-        id: 1,
-        name: 'Test test',
-    },
-    {
-        id: 1,
-        name: 'Test test',
-    },
-    {
-        id: 1,
-        name: 'Test test',
-    },
-    {
-        id: 1,
-        name: 'Test test',
-    },
-    {
-        id: 1,
-        name: 'Test test',
-    },
-    {
-        id: 1,
-        name: 'Test test',
-    },
-    {
-        id: 1,
-        name: 'Test test',
-    },
-    {
-        id: 1,
-        name: 'Test test',
-    },
-    {
-        id: 1,
-        name: 'Test test',
-    },
-    {
-        id: 1,
-        name: 'Test test',
-    },
-    {
-        id: 1,
-        name: 'Test test',
-    },
-    {
-        id: 1,
-        name: 'Test test',
-    },
-    {
-        id: 1,
-        name: 'Test test',
-    },
+    // {
+    //     id: 1,
+    //     name: 'Test test',
+    // },
+    // {
+    //     id: 1,
+    //     name: 'Test test',
+    // },
+    // {
+    //     id: 1,
+    //     name: 'Test test',
+    // },
+    // {
+    //     id: 1,
+    //     name: 'Test test',
+    // },
+    // {
+    //     id: 1,
+    //     name: 'Test test',
+    // },
+    // {
+    //     id: 1,
+    //     name: 'Test test',
+    // },
+    // {
+    //     id: 1,
+    //     name: 'Test test',
+    // },
+    // {
+    //     id: 1,
+    //     name: 'Test test',
+    // },
+    // {
+    //     id: 1,
+    //     name: 'Test test',
+    // },
+    // {
+    //     id: 1,
+    //     name: 'Test test',
+    // },
+    // {
+    //     id: 1,
+    //     name: 'Test test',
+    // },
+    // {
+    //     id: 1,
+    //     name: 'Test test',
+    // },
+    // {
+    //     id: 1,
+    //     name: 'Test test',
+    // },
+    // {
+    //     id: 1,
+    //     name: 'Test test',
+    // },
+    // {
+    //     id: 1,
+    //     name: 'Test test',
+    // },
+    // {
+    //     id: 1,
+    //     name: 'Test test',
+    // },
+    // {
+    //     id: 1,
+    //     name: 'Test test',
+    // },
 ];
 
 const useStyles = makeStyles()((theme) => ({
@@ -96,9 +96,9 @@ function RoomPage() {
 
     return (
         <>
-            <Grid container spacing={2}>
+            <Grid container spacing={2} justifyContent="center" alignItems="center" sx={{ height: '100%' }}>
                 {users.map((item) => (
-                    <Grid item key={item.id} xl={3} lg={4} md={6} sm={12} xs={12}>
+                    <Grid item key={item.id} xs={12 / users.length < 4 ? 4 : 12 / users.length}>
                         <UserCard userItem={item} />
                     </Grid>
                 ))}
