@@ -10,7 +10,7 @@ endif
 
 
 init:
-	poetry install --extras "dev"
+	poetry install
 
 
 build: ## build docker image
