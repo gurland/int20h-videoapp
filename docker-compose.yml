@@ -1,0 +1,75 @@
+version: "3.9"  # optional since v1.27.0
+services:
+  nginx:
+    build: ./nginx_service/
+    ports:
+      - "80:80"
+    depends_on:
+      - frontend
+      - api
+
+  api:
+    build: ./api_gateway
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./api_gateway:/app/
+    environment:
+      DEBUG: "*"
+      JWT_SECRET: secret
+
+  redis:
+    image: redis
+
+  frontend:
+    build: ./frontend_service/
+
+  db:
+    image: postgres
+    restart: always
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./db_data/:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: testpassword1234
+
+  mongo:
+    build: ./mongo_service/
+    restart: always
+    volumes:
+    - ./mongodb_data:/data/db
+    ports:
+      - "27987:27017"
+
+    environment:
+      MONGO_INITDB_DATABASE: chats
+
+  chat:
+    build: ./chat_service/
+    restart: always
+
+    volumes:
+      - ./chat_service/src:/app
+
+    depends_on:
+      - mongo
+
+    environment:
+      JWT_SECRET: secret
+      MONGO_URI: "mongodb://root:supersecretpass@mongo:27017/chats?authSource=chats"
+
+  notifications:
+    build: ./notification_service/
+    restart: always
+
+    volumes:
+      - ./notification_service/src:/app
+
+    depends_on:
+      - mongo
+
+    environment:
+      DEBUG: "*"
+      JWT_SECRET: secret
+      MONGO_URI: "mongodb://root:supersecretpass@mongo:27017/notifications?authSource=chats"
