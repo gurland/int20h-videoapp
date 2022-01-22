@@ -30,7 +30,7 @@ function UserCard({ userItem }: UserCardProps) {
     return (
         <>
             <CustomCard key={id} className={classes.userCard}>
-                <video autoPlay muted>
+                <video autoPlay muted controls>
                     <source src="https://shattereddisk.github.io/rickroll/rickroll.mp4" type="video/mp4" />
                 </video>
                 <Box display="flex" mt={1} alignItems="center">
