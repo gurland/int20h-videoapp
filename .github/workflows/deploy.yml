@@ -1,0 +1,88 @@
+name: Production Build
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  push-api-image:
+    environment: Prod
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version:
+          - "3.8.10"
+    env:
+      ECR_URL: ${{ secrets.API_ECR_URL }}
+    steps:
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - uses: actions/checkout@v2
+      - name: Install poetry
+        run: pip install poetry
+        working-directory: ./api_gateway
+      - name: Configure poetry
+        shell: bash
+        run: poetry config virtualenvs.in-project true
+        working-directory: ./api_gateway
+      - name: Set up globally available cache
+        uses: actions/cache@v2
+        id: cache
+        with:
+          path: |
+            .venv
+          key: poetry-${{ runner.os }}-${{ matrix.python-version }}-${{ hashFiles('**/poetry.lock') }}
+      - name: Install dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        working-directory: ./api_gateway
+        run: make init
+      - name: Build docker image
+        working-directory: ./api_gateway
+        run: make build
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+      - name: Push Image to Amazon ECR
+        working-directory: ./api_gateway
+        id: push-image
+        run: |
+          docker push ${ECR_URL}:api_gateway
+
+  deploy-frontend:
+    environment: Prod
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [ 14.x ]
+    steps:
+      - uses: actions/checkout@v1
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Yarn Install
+        run: yarn install
+        working-directory: ./frontend_service
+      - name: Production Build
+        run: yarn build
+        working-directory: ./frontend_service
+      - name: Deploy to S3
+        uses: jakejarvis/s3-sync-action@master
+        with:
+          args: --acl public-read --delete
+        env:
+          AWS_S3_BUCKET: ${{ secrets.AWS_PRODUCTION_BUCKET_NAME }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+          SOURCE_DIR: "frontend_service/build"
