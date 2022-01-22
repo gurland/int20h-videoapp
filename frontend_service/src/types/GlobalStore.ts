@@ -1,1 +1,3 @@
-export interface GlobalStore {}
+export interface GlobalStore {
+    accessToken: string | null;
+}
