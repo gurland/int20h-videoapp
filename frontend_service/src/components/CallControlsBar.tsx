@@ -6,6 +6,7 @@ import VolumeOffIcon from '@mui/icons-material/VolumeOff';
 import VideocamIcon from '@mui/icons-material/Videocam';
 import VideocamOffIcon from '@mui/icons-material/VideocamOff';
 import CallEndIcon from '@mui/icons-material/CallEnd';
+import ChatIcon from '@mui/icons-material/Chat';
 import CustomCard from './CustomCard';
 import { Box, IconButton } from '@mui/material';
 import { makeStyles } from 'tss-react/mui';
@@ -17,16 +18,12 @@ interface DeviceControlIconProps {
     setIsOff: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+const toggleControl = (dispatchFunc: React.Dispatch<React.SetStateAction<boolean>>) => () =>
+    dispatchFunc((prevState) => !prevState);
+
 const DeviceControlIcon = ({ isOff, setIsOff, onIcon, offIcon }: DeviceControlIconProps) => {
-    const handleIconClick = () => {
-        if (isOff) {
-            setIsOff(false);
-        } else {
-            setIsOff(true);
-        }
-    };
     return (
-        <IconButton size="large" onClick={handleIconClick}>
+        <IconButton size="large" onClick={toggleControl(setIsOff)}>
             {isOff ? offIcon : onIcon}
         </IconButton>
     );
@@ -54,7 +51,11 @@ const useStyles = makeStyles()((theme) => ({
     },
 }));
 
-function CallControlsBar() {
+interface CallControlsBarProps {
+    setChatOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+function CallControlsBar({ setChatOpen }: CallControlsBarProps) {
     const [micOff, setMicOff] = useState(false);
     const [soundOff, setSoundOff] = useState(false);
     const [videoOff, setVideoOff] = useState(false);
@@ -77,6 +78,9 @@ function CallControlsBar() {
                     offIcon={<VideocamOffIcon />}
                     onIcon={<VideocamIcon />}
                 />
+                <IconButton size="large" onClick={toggleControl(setChatOpen)}>
+                    <ChatIcon color="info" />
+                </IconButton>
                 <IconButton size="large">
                     <CallEndIcon color="error" />
                 </IconButton>

@@ -1,9 +1,11 @@
-import React from 'react';
-import { Avatar, Box, Grid, Typography } from '@mui/material';
+import React, { useState } from 'react';
+import { Box, Drawer, Grid, IconButton } from '@mui/material';
 import { User } from '../types/User';
-import CustomCard from '../components/CustomCard';
 import CallControlsBar from '../components/CallControlsBar';
 import { makeStyles } from 'tss-react/mui';
+import CloseIcon from '@mui/icons-material/Close';
+import RoomChat from '../components/RoomChat';
+import UserCard from '../components/UserCard';
 
 const users: User[] = [
     {
@@ -80,35 +82,41 @@ const users: User[] = [
     },
 ];
 
-const useStyles = makeStyles()(() => ({
-    userCard: {
-        display: 'flex',
-        flexDirection: 'column',
-        cursor: 'pointer',
+const useStyles = makeStyles()((theme) => ({
+    drawerPaper: {
+        padding: theme.spacing(2),
     },
 }));
 
 function RoomPage() {
     const { classes } = useStyles();
+    const [chatOpen, setChatOpen] = useState(false);
+
+    const handleDrawerClose = () => setChatOpen(false);
 
     return (
         <>
             <Grid container spacing={2}>
-                {users.map(({ id, name, profileImage }) => (
-                    <Grid item key={id} xl={3} lg={4} md={6} sm={12} xs={12}>
-                        <CustomCard key={id} className={classes.userCard}>
-                            <video autoPlay controls muted>
-                                <source src="https://shattereddisk.github.io/rickroll/rickroll.mp4" type="video/mp4" />
-                            </video>
-                            <Box display="flex" mt={1} alignItems="center">
-                                <Avatar alt={name} src={profileImage} sx={{ mr: 1, width: 30, height: 30 }} />
-                                <Typography>{name}</Typography>
-                            </Box>
-                        </CustomCard>
+                {users.map((item) => (
+                    <Grid item key={item.id} xl={3} lg={4} md={6} sm={12} xs={12}>
+                        <UserCard userItem={item} />
                     </Grid>
                 ))}
             </Grid>
-            <CallControlsBar />
+            <Drawer
+                classes={{ paper: classes.drawerPaper }}
+                elevation={0}
+                variant="persistent"
+                open={chatOpen}
+                onClose={handleDrawerClose}
+                anchor="right"
+            >
+                <Box>
+                    <IconButton onClick={handleDrawerClose}>{<CloseIcon />}</IconButton>
+                </Box>
+                <RoomChat />
+            </Drawer>
+            <CallControlsBar setChatOpen={setChatOpen} />
         </>
     );
 }
