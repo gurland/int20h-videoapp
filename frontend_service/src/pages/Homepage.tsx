@@ -1,20 +1,12 @@
 import React from 'react';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
 import PersonIcon from '@mui/icons-material/Person';
 import { Room } from '../types/Room';
 import { makeStyles } from 'tss-react/mui';
 import CustomCard from '../components/CustomCard';
-import {
-    Avatar,
-    AvatarGroup,
-    Box,
-    CardActions,
-    CardContent,
-    CardHeader,
-    Grid,
-    IconButton,
-    Typography,
-} from '@mui/material';
+import { Avatar, AvatarGroup, Box, CardActions, CardContent, CardHeader, Grid, Typography } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { createRoute } from '../utils/common';
+import { Routes } from '../constants/routes';
 
 const rooms: Room[] = [
     {
@@ -210,18 +202,22 @@ const useStyles = makeStyles()(() => ({
 
 function Homepage() {
     const { classes } = useStyles();
+    const navigate = useNavigate();
 
     return (
         <Grid container spacing={3}>
             {rooms.map((item) => (
                 <Grid item xl={3} lg={4} md={6} sm={12} xs={12} key={item.id}>
-                    <CustomCard className={classes.roomCard}>
+                    <CustomCard
+                        className={classes.roomCard}
+                        onClick={() => navigate(createRoute(Routes.Room, { roomId: item.id }))}
+                    >
                         <CardHeader
-                            action={
-                                <IconButton>
-                                    <MoreVertIcon />
-                                </IconButton>
-                            }
+                            // action={
+                            //     <IconButton>
+                            //         <MoreVertIcon />
+                            //     </IconButton>
+                            // }
                             title={item.title}
                         />
                         <CardContent>
