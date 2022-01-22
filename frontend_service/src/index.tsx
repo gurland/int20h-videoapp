@@ -22,6 +22,20 @@ theme = createTheme({
                 },
             },
         },
+        MuiButton: {
+            styleOverrides: {
+                root: {
+                    borderRadius: theme.spacing(2),
+                },
+            },
+        },
+        MuiOutlinedInput: {
+            styleOverrides: {
+                root: {
+                    borderRadius: theme.spacing(2),
+                },
+            },
+        },
     },
 });
 

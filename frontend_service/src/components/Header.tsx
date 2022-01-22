@@ -28,7 +28,7 @@ function Header() {
             </Link>
             <Box display="flex">
                 <Link to={Routes.CreateRoom} style={{ textDecoration: 'none' }}>
-                    <Button variant="contained" disableElevation sx={{ borderRadius: 16, mr: 3 }}>
+                    <Button variant="contained" disableElevation sx={{ mr: 3 }}>
                         Create room
                     </Button>
                 </Link>
