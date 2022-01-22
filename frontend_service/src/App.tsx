@@ -7,6 +7,7 @@ import Header from './components/Header';
 import { makeStyles } from 'tss-react/mui';
 import AuthPage from './pages/AuthPage';
 import ProfilePage from './pages/ProfilePage';
+import CreateRoomPage from './pages/CreateRoomPage';
 
 const useStyles = makeStyles()((theme) => ({
     app: {
@@ -37,6 +38,7 @@ function App() {
                     <Route path={Routes.Room} element={<RoomPage />} />
                     <Route path={Routes.Auth} element={<AuthPage />} />
                     <Route path={Routes.Profile} element={<ProfilePage />} />
+                    <Route path={Routes.CreateRoom} element={<CreateRoomPage />} />
                     <Route path="*" element={<Navigate to={Routes.Homepage} />} />
                 </BrowserRoutes>
             </div>

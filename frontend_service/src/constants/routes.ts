@@ -3,4 +3,5 @@ export enum Routes {
     Room = '/call/:roomId',
     Auth = '/auth',
     Profile = '/profile',
+    CreateRoom = '/create-room',
 }

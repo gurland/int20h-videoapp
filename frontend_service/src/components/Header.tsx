@@ -23,11 +23,16 @@ function Header() {
 
     return (
         <div className={classes.navbar}>
-            <Typography variant="h4">Title</Typography>
+            <Link style={{ textDecoration: 'none', color: 'inherit' }} to={Routes.Homepage}>
+                <Typography variant="h4">Title</Typography>
+            </Link>
             <Box display="flex">
-                <Button variant="contained" disableElevation sx={{ borderRadius: 16, mr: 3 }}>
-                    Create room
-                </Button>
+                <Link to={Routes.CreateRoom} style={{ textDecoration: 'none' }}>
+                    <Button variant="contained" disableElevation sx={{ borderRadius: 16, mr: 3 }}>
+                        Create room
+                    </Button>
+                </Link>
+
                 <Link to={Routes.Profile}>
                     <Avatar src="https://cdn.discordapp.com/attachments/630887784185331745/934094537452814396/unknown_5.png" />
                 </Link>
