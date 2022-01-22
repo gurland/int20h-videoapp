@@ -56,7 +56,6 @@ jobs:
         working-directory: ./api_gateway
         id: push-image
         run: |
-          VERSION=$(poetry run python -c "from importlib.metadata import version; print(version('api_gateway'))")
           docker push ${ECR_URL}:${VERSION}
 
   deploy-frontend:
