@@ -38,6 +38,7 @@ const useStyles = makeStyles()((theme) => ({
         right: 0,
         marginRight: 'auto',
         marginLeft: 'auto',
+        boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px',
         [theme.breakpoints.down(530)]: {
             width: 'unset',
             bottom: 0,
