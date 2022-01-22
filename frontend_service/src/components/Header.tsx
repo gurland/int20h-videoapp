@@ -1,7 +1,9 @@
 import React from 'react';
 import Button from '@mui/material/Button';
 import { makeStyles } from 'tss-react/mui';
-import { Typography } from '@mui/material';
+import { Avatar, Box, Typography } from '@mui/material';
+import { Link } from 'react-router-dom';
+import { Routes } from '../constants/routes';
 
 const useStyles = makeStyles()((theme) => ({
     navbar: {
@@ -22,9 +24,14 @@ function Header() {
     return (
         <div className={classes.navbar}>
             <Typography variant="h4">Title</Typography>
-            <Button variant="contained" disableElevation sx={{ borderRadius: 16, mr: 1 }}>
-                Create room
-            </Button>
+            <Box display="flex">
+                <Button variant="contained" disableElevation sx={{ borderRadius: 16, mr: 3 }}>
+                    Create room
+                </Button>
+                <Link to={Routes.Profile}>
+                    <Avatar src="https://cdn.discordapp.com/attachments/630887784185331745/934094537452814396/unknown_5.png" />
+                </Link>
+            </Box>
         </div>
     );
 }
