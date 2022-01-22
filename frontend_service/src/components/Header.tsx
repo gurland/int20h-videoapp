@@ -9,6 +9,7 @@ const useStyles = makeStyles()((theme) => ({
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: theme.spacing(2, 4),
+        transition: 'padding 0.2s ease-in-out',
         [theme.breakpoints.down('md')]: {
             padding: theme.spacing(2, 2),
         },
