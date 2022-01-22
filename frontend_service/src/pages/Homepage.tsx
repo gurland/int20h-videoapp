@@ -1,12 +1,7 @@
 import React from 'react';
-import PersonIcon from '@mui/icons-material/Person';
 import { Room } from '../types/Room';
-import { makeStyles } from 'tss-react/mui';
-import CustomCard from '../components/CustomCard';
-import { Avatar, AvatarGroup, Box, CardActions, CardContent, CardHeader, Grid, Typography } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
-import { createRoute } from '../utils/common';
-import { Routes } from '../constants/routes';
+import { Grid } from '@mui/material';
+import RoomCard from '../components/RoomCard';
 
 const rooms: Room[] = [
     {
@@ -187,58 +182,12 @@ const rooms: Room[] = [
     },
 ];
 
-const useStyles = makeStyles()(() => ({
-    roomCard: {
-        display: 'flex',
-        flexDirection: 'column',
-        height: 200,
-        cursor: 'pointer',
-    },
-    description: {
-        height: 50,
-        overflow: 'auto',
-    },
-}));
-
 function Homepage() {
-    const { classes } = useStyles();
-    const navigate = useNavigate();
-
     return (
         <Grid container spacing={3}>
             {rooms.map((item) => (
                 <Grid item xl={3} lg={4} md={6} sm={12} xs={12} key={item.id}>
-                    <CustomCard
-                        className={classes.roomCard}
-                        onClick={() => navigate(createRoute(Routes.Room, { roomId: item.id }))}
-                    >
-                        <CardHeader
-                            // action={
-                            //     <IconButton>
-                            //         <MoreVertIcon />
-                            //     </IconButton>
-                            // }
-                            title={item.title}
-                        />
-                        <CardContent>
-                            <Typography component="p" variant="body2" className={classes.description}>
-                                {item.description}
-                            </Typography>
-                            <AvatarGroup max={3}>
-                                {item.userList.map((user) => (
-                                    <Avatar alt={user.name} key={user.id} src={user.profileImage} />
-                                ))}
-                            </AvatarGroup>
-                        </CardContent>
-                        <CardActions sx={{ alignSelf: 'self-end', marginTop: 'auto' }}>
-                            <Box display="flex" alignItems="center" justifyContent="center">
-                                <Typography variant="body2">
-                                    {item.userList.length} / {item.maxUsers}
-                                </Typography>
-                                <PersonIcon fontSize="small" sx={{ marginLeft: 1 }} />
-                            </Box>
-                        </CardActions>
-                    </CustomCard>
+                    <RoomCard room={item} />
                 </Grid>
             ))}
         </Grid>
