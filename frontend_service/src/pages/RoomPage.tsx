@@ -5,6 +5,7 @@ import CustomCard from '../components/CustomCard';
 import CallControlsBar from '../components/CallControlsBar';
 import { makeStyles } from 'tss-react/mui';
 import CloseIcon from '@mui/icons-material/Close';
+import RoomChat from '../components/RoomChat';
 
 const users: User[] = [
     {
@@ -81,11 +82,14 @@ const users: User[] = [
     },
 ];
 
-const useStyles = makeStyles()(() => ({
+const useStyles = makeStyles()((theme) => ({
     userCard: {
         display: 'flex',
         flexDirection: 'column',
         cursor: 'pointer',
+    },
+    drawerPaper: {
+        padding: theme.spacing(2),
     },
 }));
 
@@ -112,10 +116,18 @@ function RoomPage() {
                     </Grid>
                 ))}
             </Grid>
-            <Drawer elevation={0} variant="persistent" open={chatOpen} onClose={handleDrawerClose} anchor="right">
+            <Drawer
+                classes={{ paper: classes.drawerPaper }}
+                elevation={0}
+                variant="persistent"
+                open={chatOpen}
+                onClose={handleDrawerClose}
+                anchor="right"
+            >
                 <Box>
                     <IconButton onClick={handleDrawerClose}>{<CloseIcon />}</IconButton>
                 </Box>
+                <RoomChat />
             </Drawer>
             <CallControlsBar setChatOpen={setChatOpen} />
         </>
