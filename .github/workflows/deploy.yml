@@ -6,7 +6,55 @@ on:
       - master
 
 jobs:
-  deploy:
+  push-api-image:
+    environment: Prod
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version:
+          - "3.8.10"
+    env:
+      ECR_URL: ${{ secrets.API_ECR_URL }}
+    steps:
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - uses: actions/checkout@v2
+      - name: Install poetry
+        run: pip install poetry
+      - name: Configure poetry
+        shell: bash
+        run: poetry config virtualenvs.in-project true
+      - name: Set up globally available cache
+        uses: actions/cache@v2
+        id: cache
+        with:
+          path: |
+            .venv
+          key: poetry-${{ runner.os }}-${{ matrix.python-version }}-${{ hashFiles('**/poetry.lock') }}
+      - name: Install dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: make init
+      - name: Build docker image
+        run: make build
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+      - name: Push Image to Amazon ECR
+        id: push-image
+        run: |
+          VERSION=$(poetry run python -c "from importlib.metadata import version; print(version('api_gateway'))")
+          docker push ${ECR_URL}:${VERSION}
+
+  deploy-frontend:
     environment: Prod
     runs-on: ubuntu-latest
     strategy:
