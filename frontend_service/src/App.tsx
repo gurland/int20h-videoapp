@@ -5,6 +5,8 @@ import Homepage from './pages/Homepage';
 import RoomPage from './pages/RoomPage';
 import Header from './components/Header';
 import { makeStyles } from 'tss-react/mui';
+import AuthPage from './pages/AuthPage';
+import ProfilePage from './pages/ProfilePage';
 
 const useStyles = makeStyles()((theme) => ({
     app: {
@@ -33,6 +35,8 @@ function App() {
                 <BrowserRoutes>
                     <Route path={Routes.Homepage} element={<Homepage />} />
                     <Route path={Routes.Room} element={<RoomPage />} />
+                    <Route path={Routes.Auth} element={<AuthPage />} />
+                    <Route path={Routes.Profile} element={<ProfilePage />} />
                     <Route path="*" element={<Navigate to={Routes.Homepage} />} />
                 </BrowserRoutes>
             </div>
