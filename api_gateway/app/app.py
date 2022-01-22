@@ -20,11 +20,11 @@ def create_app():
     app = Flask(__name__)
     app.url_map.strict_slashes = False
     app.config["DEBUG"] = False
-    app.config['API_TITLE'] = 'Round API'
+    app.config['API_TITLE'] = 'INT20H Task'
     app.config['API_VERSION'] = 'v1'
     app.config['OPENAPI_VERSION'] = '3.0.3'
     app.config["JWT_SECRET_KEY"] = JWT_SECRET
-    app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(minutes=10)
+    app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(days=30)
     app.config["JWT_REFRESH_TOKEN_EXPIRES"] = timedelta(days=30)
     JWTManager(app)
     api = Api(app)
