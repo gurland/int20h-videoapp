@@ -1,9 +1,10 @@
-import React from 'react';
-import { Avatar, Box, Grid, Typography } from '@mui/material';
+import React, { useState } from 'react';
+import { Avatar, Box, Drawer, Grid, IconButton, Typography } from '@mui/material';
 import { User } from '../types/User';
 import CustomCard from '../components/CustomCard';
 import CallControlsBar from '../components/CallControlsBar';
 import { makeStyles } from 'tss-react/mui';
+import CloseIcon from '@mui/icons-material/Close';
 
 const users: User[] = [
     {
@@ -90,6 +91,9 @@ const useStyles = makeStyles()(() => ({
 
 function RoomPage() {
     const { classes } = useStyles();
+    const [chatOpen, setChatOpen] = useState(false);
+
+    const handleDrawerClose = () => setChatOpen(false);
 
     return (
         <>
@@ -108,7 +112,12 @@ function RoomPage() {
                     </Grid>
                 ))}
             </Grid>
-            <CallControlsBar />
+            <Drawer elevation={0} variant="persistent" open={chatOpen} onClose={handleDrawerClose} anchor="right">
+                <Box>
+                    <IconButton onClick={handleDrawerClose}>{<CloseIcon />}</IconButton>
+                </Box>
+            </Drawer>
+            <CallControlsBar setChatOpen={setChatOpen} />
         </>
     );
 }
