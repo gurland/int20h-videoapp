@@ -8,7 +8,7 @@ To use this demo in mozilla developer go to about:config set to true media.devic
 Sorry, but AWS Route53 ate our domain and DNS Records aren't propagating, we were trying to create ACM SSL certificate or at least LetsEncrypt but it didn't work cause of DNS.
 
 ![Main page](https://i.imgur.com/uTJXnOf.png)
-![Video Room](https://i.imgur.com/uTJXnOf.png)
+![Video and Chat Room](https://i.imgur.com/UDEVlSU.png)
 
 ## Features
 - Single Page Application
