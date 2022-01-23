@@ -40,7 +40,7 @@ class User(BaseModel):
         response_dict = {
             "id": self.id,
             "login": self.login,
-            "profile_name": self.profile_name,
+            "profileName": self.profile_name,
         }
 
         if self.profile_picture:
