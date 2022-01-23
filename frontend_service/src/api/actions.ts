@@ -39,6 +39,6 @@ export async function joinToRoom(roomId: string): Promise<AxiosResponse<ApiRespo
     return axiosClient.post(`/api/rooms/${roomId}/participants`);
 }
 
-export async function createRoom(body: CreateRoomRequest): Promise<AxiosResponse<ApiResponse>> {
+export async function createRoom(body: CreateRoomRequest): Promise<AxiosResponse<CreateRoomResponse>> {
     return axiosClient.post(`/api/rooms`, body);
 }
