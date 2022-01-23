@@ -9,7 +9,7 @@ from passlib.hash import bcrypt
 from flask_jwt_extended import create_access_token
 
 
-database = PostgresqlDatabase(DB_NAME, user=DB_USER, password=DB_PASS, host=DB_HOST, port=DB_PORT, autorollback=True)
+database = PostgresqlDatabase(DB_NAME, user=DB_USER, password=DB_PASS, host=DB_HOST, port=DB_PORT, autorollback=True, autoconnect=True)
 
 
 class BaseModel(Model):

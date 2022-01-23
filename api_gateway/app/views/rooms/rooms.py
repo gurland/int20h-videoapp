@@ -17,7 +17,7 @@ class Rooms(MethodView):
     @blp.response(200)
     @jwt_required()
     def get(self):
-        with database:
+        with database.atomic() as trx:
             rooms = Room.select().where(Room.public==True)
             result = []
             for room in rooms:
@@ -28,7 +28,7 @@ class Rooms(MethodView):
     @blp.response(200)
     @jwt_required()
     def post(self, register_data):
-        with database:
+        with database.atomic() as trx:
             identity = get_jwt_identity()
 
             try:
@@ -56,7 +56,7 @@ class RoomByUUID(MethodView):
     @blp.response(200)
     @jwt_required()
     def get(self, room_id):
-        with database:
+        with database.atomic() as trx:
             identity = get_jwt_identity()
 
             try:
@@ -78,7 +78,7 @@ class RoomByUUID(MethodView):
     @blp.response(200)
     @jwt_required()
     def put(self, new_data, room_id):
-        with database:
+        with database.atomic() as trx:
             identity = get_jwt_identity()
 
             try:
@@ -112,7 +112,7 @@ class RoomByUUIDParticipants(MethodView):
     @blp.response(200)
     @jwt_required()
     def get(self, room_id):
-        with database:
+        with database.atomic() as trx:
             identity = get_jwt_identity()
 
             try:
@@ -134,7 +134,7 @@ class RoomByUUIDParticipants(MethodView):
     @blp.response(200)
     @jwt_required()
     def post(self, room_id):
-        with database:
+        with database.atomic() as trx:
             identity = get_jwt_identity()
 
             try:
@@ -163,7 +163,7 @@ class RoomByUUIDParticipantsById(MethodView):
     @blp.response(200)
     @jwt_required()
     def delete(self, room_id, participant_id):
-        with database:
+        with database.atomic() as trx:
             identity = get_jwt_identity()
 
             try:
