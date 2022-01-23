@@ -69,6 +69,7 @@ io.use(function(socket, next){
   socket.on('message', (msg) => {
     Chat.findOneOrCreate({roomId: socket.roomId}, (err, chat) => {
       msg.senderId = socket.userId;
+      console.log(socket.decoded);
       msg.senderName = socket.decoded.profileName;
       chat.messages.push(msg);
       chat.save();
