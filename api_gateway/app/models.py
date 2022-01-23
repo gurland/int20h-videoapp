@@ -73,7 +73,7 @@ class Room(BaseModel):
         participants = [participant.participant for participant in RoomParticipant.select().where(RoomParticipant.room == self)]
 
         return {
-            "uuid": self.uuid,
+            "uuid": str(self.uuid),
             "name": self.name,
             "description": self.name,
             "creator": self.creator.to_dict(),
