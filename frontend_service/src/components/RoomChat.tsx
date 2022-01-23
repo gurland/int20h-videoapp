@@ -1,70 +1,22 @@
-import React from 'react';
-import { ChatMessage } from '../types/ChatMessage';
+import React, { useContext } from 'react';
 import MessageList from './MessageList';
 import ChatInput from './ChatInput';
+import { useChat } from '../utils/hooks/useChat';
+import { store } from '../utils/store';
 
-function RoomChat() {
-    const messages: ChatMessage[] = [
-        {
-            id: 1,
-            text: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit',
-            date: new Date(),
-            author: 'Test test',
-        },
-        {
-            id: 2,
-            text: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit',
-            date: new Date(),
-            author: 'Test test',
-        },
-        {
-            id: 3,
-            text: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit',
-            date: new Date(),
-            author: 'Test test',
-        },
-        {
-            id: 1,
-            text: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit',
-            date: new Date(),
-            author: 'Test test',
-        },
-        {
-            id: 2,
-            text: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit',
-            date: new Date(),
-            author: 'Test test',
-        },
-        {
-            id: 3,
-            text: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit',
-            date: new Date(),
-            author: 'Test test',
-        },
-        {
-            id: 1,
-            text: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit',
-            date: new Date(),
-            author: 'Test test',
-        },
-        {
-            id: 2,
-            text: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit',
-            date: new Date(),
-            author: 'Test test',
-        },
-        {
-            id: 3,
-            text: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit',
-            date: new Date(),
-            author: 'Test test',
-        },
-    ];
+interface RoomChatProps {
+    roomId: string | undefined;
+}
+
+function RoomChat({ roomId }: RoomChatProps) {
+    const {
+        state: { user },
+    } = useContext(store);
+    const { messages, sendMessage } = useChat(roomId as string);
 
     const handleMessageSend = (message: string) => {
-        console.log(message);
+        sendMessage(message, user?.profileName);
     };
-
     return (
         <>
             <MessageList messages={messages} />

@@ -118,7 +118,7 @@ function RoomPage() {
                 <Box>
                     <IconButton onClick={handleDrawerClose}>{<CloseIcon />}</IconButton>
                 </Box>
-                <RoomChat />
+                <RoomChat roomId={roomId} />
             </Drawer>
             <CallControlsBar setChatOpen={setChatOpen} />
         </>

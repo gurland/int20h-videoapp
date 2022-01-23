@@ -1,6 +1,9 @@
 export interface ChatMessage {
-    id: number;
-    text: string;
-    date: Date;
-    author: string;
+    _id: number;
+    createdAt: string;
+    updatedAt: string;
+    senderId: number;
+    senderName: string;
+    messageType: 'text';
+    content: string;
 }
