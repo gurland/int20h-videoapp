@@ -7,6 +7,7 @@ import { UserUpdateRequest } from './types/UserUpdateRequest';
 import { User } from '../types/User';
 import { FileUploadResponse } from './types/FileUploadResponse';
 import { Room } from '../types/Room';
+import { CreateRoomRequest } from './types/CreateRoomRequest';
 
 export async function getUser(id: number): Promise<AxiosResponse<User>> {
     return axiosClient.get(`/api/users/${id}`);
@@ -32,4 +33,12 @@ export async function uploadImage(image: File): Promise<AxiosResponse<FileUpload
 
 export async function getRooms(): Promise<AxiosResponse<Room[]>> {
     return axiosClient.get('/api/rooms');
+}
+
+export async function joinToRoom(roomId: string): Promise<AxiosResponse<ApiResponse>> {
+    return axiosClient.post(`/api/rooms/${roomId}/participants`);
+}
+
+export async function createRoom(body: CreateRoomRequest): Promise<AxiosResponse<ApiResponse>> {
+    return axiosClient.post(`/api/rooms`, body);
 }

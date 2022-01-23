@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Box, Drawer, Grid, IconButton } from '@mui/material';
 import { User } from '../types/User';
 import CallControlsBar from '../components/CallControlsBar';
@@ -7,6 +7,8 @@ import CloseIcon from '@mui/icons-material/Close';
 import RoomChat from '../components/RoomChat';
 import UserCard from '../components/UserCard';
 import { Breakpoint } from '@mui/system/createTheme/createBreakpoints';
+import { useParams } from 'react-router-dom';
+import { joinToRoom } from '../api/actions';
 
 const users: User[] = [
     {
@@ -26,6 +28,15 @@ const useStyles = makeStyles()((theme) => ({
 function RoomPage() {
     const { classes } = useStyles();
     const [chatOpen, setChatOpen] = useState(false);
+    const { roomId } = useParams();
+
+    useEffect(() => {
+        if (roomId) {
+            (async () => {
+                await joinToRoom(roomId);
+            })();
+        }
+    }, [roomId]);
 
     const handleDrawerClose = () => setChatOpen(false);
 
