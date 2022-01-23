@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Button from '@mui/material/Button';
 import { makeStyles } from 'tss-react/mui';
-import { Avatar, Box, Typography } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Avatar, Box, IconButton, Typography } from '@mui/material';
+import { Link, useNavigate } from 'react-router-dom';
 import { Routes } from '../constants/routes';
+import { Actions, store } from '../utils/store';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 const useStyles = makeStyles()((theme) => ({
     navbar: {
@@ -20,6 +22,17 @@ const useStyles = makeStyles()((theme) => ({
 
 function Header() {
     const { classes } = useStyles();
+    const {
+        state: { user },
+        dispatch,
+    } = useContext(store);
+    const navigate = useNavigate();
+
+    const handleLogOut = () => {
+        localStorage.removeItem('accessToken');
+        dispatch({ type: Actions.SetUser, payload: null });
+        navigate(Routes.Homepage);
+    };
 
     return (
         <div className={classes.navbar}>
@@ -32,15 +45,21 @@ function Header() {
                 </Typography>
             </Link>
             <Box display="flex">
-                <Link to={Routes.CreateRoom} style={{ textDecoration: 'none' }}>
-                    <Button variant="contained" disableElevation sx={{ mr: 3 }}>
-                        Create room
-                    </Button>
-                </Link>
-
-                <Link to={Routes.Profile}>
-                    <Avatar src="https://cdn.discordapp.com/attachments/630887784185331745/934094537452814396/unknown_5.png" />
-                </Link>
+                {!!user && (
+                    <>
+                        <Link to={Routes.CreateRoom} style={{ textDecoration: 'none' }}>
+                            <Button variant="contained" disableElevation sx={{ mr: 3 }}>
+                                Create room
+                            </Button>
+                        </Link>
+                        <Link to={Routes.Profile}>
+                            <Avatar src="https://cdn.discordapp.com/attachments/630887784185331745/934094537452814396/unknown_5.png" />
+                        </Link>
+                        <IconButton onClick={handleLogOut} sx={{ marginLeft: 2 }}>
+                            <LogoutIcon />
+                        </IconButton>
+                    </>
+                )}
             </Box>
         </div>
     );

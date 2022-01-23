@@ -33,7 +33,7 @@ function AuthPage() {
             data: { token },
         } = await loginFunc(login, password);
         localStorage.setItem('accessToken', token);
-        const userData: User = jwt_decode(token);
+        const { sub: userData } = jwt_decode<{ sub: User }>(token);
         dispatch({ type: Actions.SetUser, payload: userData });
         navigate(Routes.Homepage);
     });
@@ -44,7 +44,7 @@ function AuthPage() {
             data: { token },
         } = await loginFunc(login, password);
         localStorage.setItem('accessToken', token);
-        const userData: User = jwt_decode(token);
+        const { sub: userData } = jwt_decode<{ sub: User }>(token);
         dispatch({ type: Actions.SetUser, payload: userData });
         navigate(Routes.Homepage);
     });
