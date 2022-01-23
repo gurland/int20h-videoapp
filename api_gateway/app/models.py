@@ -3,23 +3,6 @@ from app.settings import *
 from datetime import datetime
 import uuid
 
-from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import scoped_session, sessionmaker
-
-
-POSTGRES_URI = (
-    f"postgresql://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/"
-    f"{DB_NAME}"
-)
-
-engine = create_engine(POSTGRES_URI, echo=True)
-Session = sessionmaker(autoflush=False, bind=engine)
-session = scoped_session(Session)
-Base = declarative_base()
-Base.query = session.query_property()
-
-
 from peewee import PostgresqlDatabase, IntegerField, CharField, DateField, BooleanField, TextField, ForeignKeyField, UUIDField, DecimalField, TimeField, DateTimeField
 from playhouse.signals import Model, post_save
 from passlib.hash import bcrypt
