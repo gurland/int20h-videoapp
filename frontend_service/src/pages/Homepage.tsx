@@ -15,14 +15,14 @@ const rooms: Room[] = [
         userList: [
             {
                 id: 1,
-                name: 'Username1',
-                profileImage:
+                login: 'Login1',
+                profilePicture:
                     'https://cdn.discordapp.com/attachments/630887784185331745/934094537452814396/unknown_5.png',
             },
             {
                 id: 2,
-                name: 'Username2',
-                profileImage:
+                login: 'Login2',
+                profilePicture:
                     'https://cdn.discordapp.com/attachments/630887784185331745/934094537452814396/unknown_5.png',
             },
         ],
@@ -35,14 +35,14 @@ const rooms: Room[] = [
         userList: [
             {
                 id: 1,
-                name: 'Username1',
-                profileImage:
+                login: 'Login1',
+                profilePicture:
                     'https://cdn.discordapp.com/attachments/630887784185331745/934094537452814396/unknown_5.png',
             },
             {
                 id: 2,
-                name: 'Username2',
-                profileImage:
+                login: 'Login2',
+                profilePicture:
                     'https://cdn.discordapp.com/attachments/630887784185331745/934094537452814396/unknown_5.png',
             },
         ],
@@ -55,26 +55,26 @@ const rooms: Room[] = [
         userList: [
             {
                 id: 1,
-                name: 'Username1',
-                profileImage:
+                login: 'Login1',
+                profilePicture:
                     'https://cdn.discordapp.com/attachments/630887784185331745/934094537452814396/unknown_5.png',
             },
             {
                 id: 2,
-                name: 'Username2',
-                profileImage:
+                login: 'Login2',
+                profilePicture:
                     'https://cdn.discordapp.com/attachments/630887784185331745/934094537452814396/unknown_5.png',
             },
             {
                 id: 1,
-                name: 'Username1',
-                profileImage:
+                login: 'Login1',
+                profilePicture:
                     'https://cdn.discordapp.com/attachments/630887784185331745/934094537452814396/unknown_5.png',
             },
             {
                 id: 1,
-                name: 'Username1',
-                profileImage:
+                login: 'Login1',
+                profilePicture:
                     'https://cdn.discordapp.com/attachments/630887784185331745/934094537452814396/unknown_5.png',
             },
         ],
@@ -87,26 +87,26 @@ const rooms: Room[] = [
         userList: [
             {
                 id: 1,
-                name: 'Username1',
-                profileImage:
+                login: 'Login1',
+                profilePicture:
                     'https://cdn.discordapp.com/attachments/630887784185331745/934094537452814396/unknown_5.png',
             },
             {
                 id: 2,
-                name: 'Username2',
-                profileImage:
+                login: 'Login2',
+                profilePicture:
                     'https://cdn.discordapp.com/attachments/630887784185331745/934094537452814396/unknown_5.png',
             },
             {
                 id: 1,
-                name: 'Username1',
-                profileImage:
+                login: 'Login1',
+                profilePicture:
                     'https://cdn.discordapp.com/attachments/630887784185331745/934094537452814396/unknown_5.png',
             },
             {
                 id: 1,
-                name: 'Username1',
-                profileImage:
+                login: 'Login1',
+                profilePicture:
                     'https://cdn.discordapp.com/attachments/630887784185331745/934094537452814396/unknown_5.png',
             },
         ],
@@ -119,26 +119,26 @@ const rooms: Room[] = [
         userList: [
             {
                 id: 1,
-                name: 'Username1',
-                profileImage:
+                login: 'Login1',
+                profilePicture:
                     'https://cdn.discordapp.com/attachments/630887784185331745/934094537452814396/unknown_5.png',
             },
             {
                 id: 2,
-                name: 'Username2',
-                profileImage:
+                login: 'Login2',
+                profilePicture:
                     'https://cdn.discordapp.com/attachments/630887784185331745/934094537452814396/unknown_5.png',
             },
             {
                 id: 1,
-                name: 'Username1',
-                profileImage:
+                login: 'Login1',
+                profilePicture:
                     'https://cdn.discordapp.com/attachments/630887784185331745/934094537452814396/unknown_5.png',
             },
             {
                 id: 1,
-                name: 'Username1',
-                profileImage:
+                login: 'Login1',
+                profilePicture:
                     'https://cdn.discordapp.com/attachments/630887784185331745/934094537452814396/unknown_5.png',
             },
         ],
@@ -151,26 +151,26 @@ const rooms: Room[] = [
         userList: [
             {
                 id: 1,
-                name: 'Username1',
-                profileImage:
+                login: 'Login1',
+                profilePicture:
                     'https://cdn.discordapp.com/attachments/630887784185331745/934094537452814396/unknown_5.png',
             },
             {
                 id: 2,
-                name: 'Username2',
-                profileImage:
+                login: 'Login2',
+                profilePicture:
                     'https://cdn.discordapp.com/attachments/630887784185331745/934094537452814396/unknown_5.png',
             },
             {
                 id: 1,
-                name: 'Username1',
-                profileImage:
+                login: 'Login1',
+                profilePicture:
                     'https://cdn.discordapp.com/attachments/630887784185331745/934094537452814396/unknown_5.png',
             },
             {
                 id: 1,
-                name: 'Username1',
-                profileImage:
+                login: 'Login1',
+                profilePicture:
                     'https://cdn.discordapp.com/attachments/630887784185331745/934094537452814396/unknown_5.png',
             },
         ],

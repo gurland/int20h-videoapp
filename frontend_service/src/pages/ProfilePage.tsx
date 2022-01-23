@@ -1,32 +1,47 @@
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, useContext, useState } from 'react';
 import { Button, Container, Grid, TextField, Typography } from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import { Actions, store } from '../utils/store';
+import { getUser, updateUser, uploadImage } from '../api/actions';
 
-type Inputs = { profileName: string; password: string; confirmPassword: string };
+type Inputs = { profileName: string; oldPassword: string; newPassword: string };
 
 const schema = yup.object({
     profileName: yup.string(),
-    password: yup.string(),
-    confirmPassword: yup.string().oneOf([yup.ref('password'), null], 'Passwords must match'),
+    oldPassword: yup.string(),
+    newPassword: yup.string(),
 });
 
 function ProfilePage() {
     const {
-        control,
-        getValues,
-        handleSubmit,
-        formState: { errors },
-    } = useForm<Inputs>({
-        defaultValues: { profileName: '', password: '', confirmPassword: '' },
+        state: { user },
+        dispatch,
+    } = useContext(store);
+
+    const { control, getValues, handleSubmit } = useForm<Inputs>({
+        defaultValues: { profileName: user?.profileName || '', oldPassword: '', newPassword: '' },
         resolver: yupResolver(schema),
     });
-    const { password, profileName, confirmPassword } = getValues();
 
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
-    const handleSaveClick = handleSubmit(() => null);
+    const handleSaveClick = handleSubmit(async () => {
+        let imagePath = '';
+        if (selectedFile) {
+            const { data } = await uploadImage(selectedFile);
+            imagePath = data.path;
+        }
+
+        const { oldPassword, profileName, newPassword } = getValues();
+
+        if (user) {
+            await updateUser(user.id, { profileName, oldPassword, newPassword, profilePicture: imagePath });
+            const { data } = await getUser(user.id);
+            dispatch({ type: Actions.SetUser, payload: data });
+        }
+    });
 
     const handleAvatarChange = (e: ChangeEvent<HTMLInputElement>) => {
         const fileList = e.target.files;
@@ -45,26 +60,19 @@ function ProfilePage() {
                 </Grid>
                 <Grid item xs={12}>
                     <Controller
-                        name="password"
+                        name="oldPassword"
                         control={control}
                         render={({ field }) => (
-                            <TextField {...field} placeholder="Password" fullWidth type="password" />
+                            <TextField {...field} placeholder="Old Password" fullWidth type="password" />
                         )}
                     />
                 </Grid>
                 <Grid item xs={12}>
                     <Controller
-                        name="confirmPassword"
+                        name="newPassword"
                         control={control}
                         render={({ field }) => (
-                            <TextField
-                                {...field}
-                                placeholder="Repeat Password"
-                                fullWidth
-                                error={!!errors.confirmPassword}
-                                helperText={errors.confirmPassword?.message}
-                                type="password"
-                            />
+                            <TextField {...field} placeholder="New Password" fullWidth type="password" />
                         )}
                     />
                 </Grid>

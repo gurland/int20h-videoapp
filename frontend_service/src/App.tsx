@@ -1,5 +1,5 @@
-import React from 'react';
-import { Routes as BrowserRoutes, Route, Navigate } from 'react-router-dom';
+import React, { useContext, useEffect, useState } from 'react';
+import { Navigate, Route, Routes as BrowserRoutes, useNavigate } from 'react-router-dom';
 import { Routes } from './constants/routes';
 import Homepage from './pages/Homepage';
 import RoomPage from './pages/RoomPage';
@@ -8,6 +8,11 @@ import { makeStyles } from 'tss-react/mui';
 import AuthPage from './pages/AuthPage';
 import ProfilePage from './pages/ProfilePage';
 import CreateRoomPage from './pages/CreateRoomPage';
+import { getUser } from './api/actions';
+import jwt_decode from 'jwt-decode';
+import { User } from './types/User';
+import { Actions, store } from './utils/store';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const useStyles = makeStyles()((theme) => ({
     app: {
@@ -29,19 +34,48 @@ const useStyles = makeStyles()((theme) => ({
 
 function App() {
     const { classes } = useStyles();
+    const { dispatch } = useContext(store);
+    const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        (async () => {
+            const token = localStorage.getItem('accessToken');
+            if (!token) {
+                setLoading(false);
+                return;
+            }
+            const { sub } = jwt_decode<{ sub: User }>(token);
+
+            try {
+                const { data } = await getUser(sub.id);
+                dispatch({ type: Actions.SetUser, payload: data });
+                setLoading(false);
+            } catch (e) {
+                localStorage.removeItem('accessToken');
+                navigate(Routes.Homepage);
+                setLoading(false);
+            }
+        })();
+    }, []);
+
     return (
         <div className={classes.app}>
             <Header />
-            <div className={classes.appContent}>
-                <BrowserRoutes>
-                    <Route path={Routes.Homepage} element={<Homepage />} />
-                    <Route path={Routes.Room} element={<RoomPage />} />
-                    <Route path={Routes.Auth} element={<AuthPage />} />
-                    <Route path={Routes.Profile} element={<ProfilePage />} />
-                    <Route path={Routes.CreateRoom} element={<CreateRoomPage />} />
-                    <Route path="*" element={<Navigate to={Routes.Homepage} />} />
-                </BrowserRoutes>
-            </div>
+            {loading ? (
+                <CircularProgress sx={{ margin: 'auto' }} />
+            ) : (
+                <div className={classes.appContent}>
+                    <BrowserRoutes>
+                        <Route path={Routes.Homepage} element={<Homepage />} />
+                        <Route path={Routes.Room} element={<RoomPage />} />
+                        <Route path={Routes.Auth} element={<AuthPage />} />
+                        <Route path={Routes.Profile} element={<ProfilePage />} />
+                        <Route path={Routes.CreateRoom} element={<CreateRoomPage />} />
+                        <Route path="*" element={<Navigate to={Routes.Homepage} />} />
+                    </BrowserRoutes>
+                </div>
+            )}
         </div>
     );
 }
