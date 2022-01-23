@@ -33,3 +33,7 @@ export async function uploadImage(image: File): Promise<AxiosResponse<FileUpload
 export async function getRooms(): Promise<AxiosResponse<Room[]>> {
     return axiosClient.get('/api/rooms');
 }
+
+export async function joinToRoom(roomId: string): Promise<AxiosResponse<ApiResponse>> {
+    return axiosClient.post(`/api/rooms/${roomId}/participants`);
+}
