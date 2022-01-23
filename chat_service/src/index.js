@@ -5,6 +5,8 @@ const { JWTSECRET } = require("./config.js");
 
 require("./dbconnection");
 
+peers = {}
+
 const server = http.createServer();
 const io = require("socket.io")(server, {
   cors: {
@@ -44,6 +46,35 @@ io.use(function (socket, next) {
   const chatRoom = "chat:" + socket.roomId;
 
   socket.join(chatRoom);
+
+  // Initiate the connection process as soon as the client connects
+
+  peers[socket.id] = socket
+
+  // Asking all other clients to setup the peer connection receiver
+  socket.to(chatRoom).emit('initReceive', socket.id)
+
+  /**
+   * relay a peerconnection signal to a specific socket
+   */
+  socket.on('signal', data => {
+      console.log('sending signal from ' + socket.id + ' to ', data)
+      if(!peers[data.socket_id])return
+      peers[data.socket_id].emit('signal', {
+          socket_id: socket.id,
+          signal: data.signal
+      })
+  })
+
+  /**
+   * Send message to client to initiate a connection
+   * The sender has already setup a peer connection receiver
+   */
+  socket.on('initSend', init_socket_id => {
+      console.log('INIT SEND by ' + socket.id + ' for ' + init_socket_id)
+      peers[init_socket_id].emit('initSend', socket.id)
+  })
+
   const connectedSocketIDs = await io.in(chatRoom).allSockets();
   console.log(Array.from(connectedSocketIDs));
   let connectedUsers = Array.from(connectedSocketIDs)
@@ -54,7 +85,14 @@ io.use(function (socket, next) {
   socket.emit("join", connectedUsers);
   io.to(chatRoom).emit("join", [socket.userId]);
 
+   /**
+   * remove the disconnected peer connection from all other connected clients
+   */
   socket.on("disconnect", () => {
+    console.log('socket disconnected ' + socket.id)
+    socket.to(chatRoom).emit('removePeer', socket.id)
+    delete peers[socket.id]
+
     socket.to(chatRoom).emit("leave", [socket.userId]);
     socket.leave(chatRoom);
   });
