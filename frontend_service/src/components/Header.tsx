@@ -24,7 +24,12 @@ function Header() {
     return (
         <div className={classes.navbar}>
             <Link style={{ textDecoration: 'none', color: 'inherit' }} to={Routes.Homepage}>
-                <Typography variant="h4">Title</Typography>
+                <Typography variant="h4">
+                    <i>
+                        <b>Video</b>
+                    </i>
+                    Chat
+                </Typography>
             </Link>
             <Box display="flex">
                 <Link to={Routes.CreateRoom} style={{ textDecoration: 'none' }}>
