@@ -11,75 +11,9 @@ import { Breakpoint } from '@mui/system/createTheme/createBreakpoints';
 const users: User[] = [
     {
         id: 1,
-        name: 'Test test',
-    },
-    {
-        id: 1,
-        name: 'Test test',
-    },
-    {
-        id: 1,
-        name: 'Test test',
-    },
-    {
-        id: 1,
-        name: 'Test test',
-    },
-    {
-        id: 1,
-        name: 'Test test',
-    },
-    {
-        id: 1,
-        name: 'Test test',
-    },
-    {
-        id: 1,
-        name: 'Test test',
-    },
-    {
-        id: 1,
-        name: 'Test test',
-    },
-    {
-        id: 1,
-        name: 'Test test',
-    },
-    {
-        id: 1,
-        name: 'Test test',
-    },
-    {
-        id: 1,
-        name: 'Test test',
-    },
-    {
-        id: 1,
-        name: 'Test test',
-    },
-    {
-        id: 1,
-        name: 'Test test',
-    },
-    {
-        id: 1,
-        name: 'Test test',
-    },
-    {
-        id: 1,
-        name: 'Test test',
-    },
-    {
-        id: 1,
-        name: 'Test test',
-    },
-    {
-        id: 1,
-        name: 'Test test',
-    },
-    {
-        id: 1,
-        name: 'Test test',
+        login: 'test',
+        profileName: 'Test test',
+        profilePicture: '',
     },
 ];
 

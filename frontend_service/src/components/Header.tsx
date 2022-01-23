@@ -6,6 +6,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Routes } from '../constants/routes';
 import { Actions, store } from '../utils/store';
 import LogoutIcon from '@mui/icons-material/Logout';
+import { createS3Path } from '../utils/common';
 
 const useStyles = makeStyles()((theme) => ({
     navbar: {
@@ -53,7 +54,7 @@ function Header() {
                             </Button>
                         </Link>
                         <Link to={Routes.Profile}>
-                            <Avatar src="https://cdn.discordapp.com/attachments/630887784185331745/934094537452814396/unknown_5.png" />
+                            <Avatar src={createS3Path(user.profilePicture)} />
                         </Link>
                         <IconButton onClick={handleLogOut} sx={{ marginLeft: 2 }}>
                             <LogoutIcon />

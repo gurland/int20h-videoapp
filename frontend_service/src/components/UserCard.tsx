@@ -19,7 +19,7 @@ interface UserCardProps {
 
 function UserCard({ userItem }: UserCardProps) {
     const { classes } = useStyles();
-    const { id, name, profileImage } = userItem;
+    const { id, profileName, profilePicture } = userItem;
     const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
 
     const handleCloseMenu = () => setAnchorEl(null);
@@ -34,8 +34,8 @@ function UserCard({ userItem }: UserCardProps) {
                     <source src="https://shattereddisk.github.io/rickroll/rickroll.mp4" type="video/mp4" />
                 </video>
                 <Box display="flex" mt={1} alignItems="center">
-                    <Avatar alt={name} src={profileImage} sx={{ mr: 1, width: 30, height: 30 }} />
-                    <Typography>{name}</Typography>
+                    <Avatar alt={profileName} src={profilePicture} sx={{ mr: 1, width: 30, height: 30 }} />
+                    <Typography>{profileName}</Typography>
                     <MicOffIcon fontSize="small" sx={{ marginLeft: 1 }} />
                     <IconButton sx={{ marginLeft: 'auto' }} onClick={handleOpenMenu}>
                         <MoreVertIcon />

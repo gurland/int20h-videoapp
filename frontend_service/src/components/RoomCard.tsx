@@ -1,5 +1,5 @@
 import React from 'react';
-import { createRoute } from '../utils/common';
+import { createRoute, createS3Path } from '../utils/common';
 import { Routes } from '../constants/routes';
 import { Avatar, AvatarGroup, Box, CardActions, CardContent, CardHeader, Typography } from '@mui/material';
 import PersonIcon from '@mui/icons-material/Person';
@@ -41,7 +41,7 @@ function RoomCard({ room: item }: RoomCardProps) {
                 </Typography>
                 <AvatarGroup max={3}>
                     {item.userList.map((user) => (
-                        <Avatar alt={user.name} key={user.id} src={user.profileImage} />
+                        <Avatar alt={user.profileName} key={user.id} src={createS3Path(user.profilePicture)} />
                     ))}
                 </AvatarGroup>
             </CardContent>

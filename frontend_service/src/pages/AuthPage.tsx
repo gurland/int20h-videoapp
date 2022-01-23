@@ -24,11 +24,11 @@ function AuthPage() {
         getValues,
         handleSubmit,
     } = useForm<Inputs>({ defaultValues: { login: '', password: '' }, resolver: yupResolver(schema) });
-    const { password, login } = getValues();
     const { dispatch } = useContext(store);
     const navigate = useNavigate();
 
     const handleLogin = handleSubmit(async () => {
+        const { password, login } = getValues();
         const {
             data: { token },
         } = await loginFunc(login, password);
@@ -39,6 +39,7 @@ function AuthPage() {
     });
 
     const handleSignUp = handleSubmit(async () => {
+        const { password, login } = getValues();
         await signUp(login, password);
         const {
             data: { token },

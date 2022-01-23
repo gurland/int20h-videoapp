@@ -2,7 +2,7 @@ import axios, { AxiosRequestConfig } from 'axios';
 
 export const axiosClient = axios.create({
     baseURL: 'http://157.90.230.141/api',
-    headers: { Authorization: localStorage.getItem('accessToken') || '' },
+    headers: { Authorization: `Bearer ${localStorage.getItem('accessToken') || ''}` },
 });
 
 // export function post<T extends Record<string, unknown>>(url: string, body: T, config?: AxiosRequestConfig) {
