@@ -5,6 +5,8 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import CustomCard from './CustomCard';
 import { makeStyles } from 'tss-react/mui';
 import { User } from '../types/User';
+import { useParams } from 'react-router-dom';
+import { deleteParticipant } from '../api/actions';
 
 const useStyles = makeStyles()(() => ({
     userCard: {
@@ -15,16 +17,28 @@ const useStyles = makeStyles()(() => ({
 
 interface UserCardProps {
     userItem: User;
+    getRoomInfo: (roomId: string) => void;
 }
 
-function UserCard({ userItem }: UserCardProps) {
+function UserCard({ userItem, getRoomInfo }: UserCardProps) {
     const { classes } = useStyles();
     const { id, profileName, profilePicture } = userItem;
+    const { roomId } = useParams();
     const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
 
     const handleCloseMenu = () => setAnchorEl(null);
     const handleOpenMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
+    };
+
+    const handleKickUser = () => {
+        if (roomId && id) {
+            (async () => {
+                await deleteParticipant(roomId, id);
+                await getRoomInfo(roomId);
+            })();
+        }
+        handleCloseMenu();
     };
 
     return (
@@ -43,8 +57,7 @@ function UserCard({ userItem }: UserCardProps) {
                 </Box>
             </CustomCard>
             <Menu anchorEl={anchorEl} open={!!anchorEl} onClose={handleCloseMenu}>
-                <MenuItem onClick={handleCloseMenu}>Kick</MenuItem>
-                <MenuItem onClick={handleCloseMenu}>Pin</MenuItem>
+                <MenuItem onClick={handleKickUser}>Kick</MenuItem>
             </Menu>
         </>
     );
