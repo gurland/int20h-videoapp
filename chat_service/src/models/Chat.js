@@ -14,6 +14,9 @@ const messageSchema = new Schema(
 		senderId:
 		{
 			type: Number
+		},
+		senderName: {
+    	type: String
 		}
 	},
 	{

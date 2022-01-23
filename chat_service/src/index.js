@@ -69,6 +69,7 @@ io.use(function(socket, next){
   socket.on('message', (msg) => {
     Chat.findOneOrCreate({roomId: socket.roomId}, (err, chat) => {
       msg.senderId = socket.userId;
+      msg.senderName = socket.decoded.profileName;
       chat.messages.push(msg);
       chat.save();
       io.to(chatRoom).emit('message-broadcast', [msg]);
