@@ -10,6 +10,9 @@ import ChatIcon from '@mui/icons-material/Chat';
 import CustomCard from './CustomCard';
 import { Box, IconButton } from '@mui/material';
 import { makeStyles } from 'tss-react/mui';
+import { deleteParticipant } from '../api/actions';
+import { useNavigate } from 'react-router-dom';
+import { Routes } from '../constants/routes';
 
 interface DeviceControlIconProps {
     onIcon: React.ReactElement;
@@ -54,14 +57,26 @@ const useStyles = makeStyles()((theme) => ({
 
 interface CallControlsBarProps {
     setChatOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    userId: number | undefined;
+    roomId: string | undefined;
 }
 
-function CallControlsBar({ setChatOpen }: CallControlsBarProps) {
+function CallControlsBar({ setChatOpen, userId, roomId }: CallControlsBarProps) {
     const [micOff, setMicOff] = useState(false);
     const [soundOff, setSoundOff] = useState(false);
     const [videoOff, setVideoOff] = useState(false);
 
     const { classes } = useStyles();
+    const navigate = useNavigate();
+
+    const handleDisconnect = () => {
+        if (roomId && userId) {
+            (async () => {
+                await deleteParticipant(roomId, userId);
+                navigate(Routes.Homepage);
+            })();
+        }
+    };
 
     return (
         <CustomCard className={classes.card}>
@@ -82,7 +97,7 @@ function CallControlsBar({ setChatOpen }: CallControlsBarProps) {
                 <IconButton size="large" onClick={toggleControl(setChatOpen)}>
                     <ChatIcon color="info" />
                 </IconButton>
-                <IconButton size="large">
+                <IconButton size="large" onClick={handleDisconnect}>
                     <CallEndIcon color="error" />
                 </IconButton>
             </Box>

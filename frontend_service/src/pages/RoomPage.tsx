@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { Box, Drawer, Grid, IconButton } from '@mui/material';
 import { User } from '../types/User';
 import CallControlsBar from '../components/CallControlsBar';
@@ -8,7 +8,8 @@ import RoomChat from '../components/RoomChat';
 import UserCard from '../components/UserCard';
 import { Breakpoint } from '@mui/system/createTheme/createBreakpoints';
 import { useParams } from 'react-router-dom';
-import { joinToRoom } from '../api/actions';
+import { deleteParticipant, joinToRoom } from '../api/actions';
+import { store } from '../utils/store';
 
 const users: User[] = [
     {
@@ -29,6 +30,9 @@ function RoomPage() {
     const { classes } = useStyles();
     const [chatOpen, setChatOpen] = useState(false);
     const { roomId } = useParams();
+    const {
+        state: { user },
+    } = useContext(store);
 
     useEffect(() => {
         if (roomId) {
@@ -36,7 +40,15 @@ function RoomPage() {
                 await joinToRoom(roomId);
             })();
         }
-    }, [roomId]);
+
+        return () => {
+            if (roomId && user?.id) {
+                (async () => {
+                    await deleteParticipant(roomId, user.id);
+                })();
+            }
+        };
+    }, [roomId, user?.id]);
 
     const handleDrawerClose = () => setChatOpen(false);
 
@@ -97,7 +109,7 @@ function RoomPage() {
                 </Box>
                 <RoomChat />
             </Drawer>
-            <CallControlsBar setChatOpen={setChatOpen} />
+            <CallControlsBar setChatOpen={setChatOpen} roomId={roomId} userId={user?.id} />
         </>
     );
 }

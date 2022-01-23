@@ -7,6 +7,7 @@ import { createRoom } from '../api/actions';
 import { useNavigate } from 'react-router-dom';
 import { Routes } from '../constants/routes';
 import { LoadingButton } from '@mui/lab';
+import { createRoute } from '../utils/common';
 
 type Inputs = { title: string; description: string; isPrivate: boolean };
 
@@ -31,9 +32,11 @@ function CreateRoomPage() {
     const handleCreate = handleSubmit(async () => {
         setLoading(true);
         const { title, description, isPrivate } = getValues();
-        await createRoom({ name: title, description, public: !isPrivate });
-        navigate(Routes.Homepage);
-        setLoading(false);
+        const { data } = await createRoom({ name: title, description, public: !isPrivate });
+        if (data) {
+            setLoading(false);
+            navigate(createRoute(Routes.Room, { roomId: data.roomId }));
+        }
     });
 
     return (
