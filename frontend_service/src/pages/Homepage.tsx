@@ -1,185 +1,27 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Room } from '../types/Room';
 import { Box, Button, Container, Grid, Typography } from '@mui/material';
 import RoomCard from '../components/RoomCard';
 import { useNavigate } from 'react-router-dom';
 import { Routes } from '../constants/routes';
-
-const rooms: Room[] = [
-    {
-        id: 1,
-        name: 'Title',
-        description:
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-        userList: [
-            {
-                id: 1,
-                login: 'Login1',
-                profilePicture:
-                    'https://cdn.discordapp.com/attachments/630887784185331745/934094537452814396/unknown_5.png',
-            },
-            {
-                id: 2,
-                login: 'Login2',
-                profilePicture:
-                    'https://cdn.discordapp.com/attachments/630887784185331745/934094537452814396/unknown_5.png',
-            },
-        ],
-    },
-    {
-        id: 2,
-        name: 'Title',
-        description: 'Description',
-        userList: [
-            {
-                id: 1,
-                login: 'Login1',
-                profilePicture:
-                    'https://cdn.discordapp.com/attachments/630887784185331745/934094537452814396/unknown_5.png',
-            },
-            {
-                id: 2,
-                login: 'Login2',
-                profilePicture:
-                    'https://cdn.discordapp.com/attachments/630887784185331745/934094537452814396/unknown_5.png',
-            },
-        ],
-    },
-    {
-        id: 3,
-        name: 'Title',
-        description: 'Description',
-        userList: [
-            {
-                id: 1,
-                login: 'Login1',
-                profilePicture:
-                    'https://cdn.discordapp.com/attachments/630887784185331745/934094537452814396/unknown_5.png',
-            },
-            {
-                id: 2,
-                login: 'Login2',
-                profilePicture:
-                    'https://cdn.discordapp.com/attachments/630887784185331745/934094537452814396/unknown_5.png',
-            },
-            {
-                id: 1,
-                login: 'Login1',
-                profilePicture:
-                    'https://cdn.discordapp.com/attachments/630887784185331745/934094537452814396/unknown_5.png',
-            },
-            {
-                id: 1,
-                login: 'Login1',
-                profilePicture:
-                    'https://cdn.discordapp.com/attachments/630887784185331745/934094537452814396/unknown_5.png',
-            },
-        ],
-    },
-    {
-        id: 3,
-        name: 'Title',
-        description: 'Description',
-        userList: [
-            {
-                id: 1,
-                login: 'Login1',
-                profilePicture:
-                    'https://cdn.discordapp.com/attachments/630887784185331745/934094537452814396/unknown_5.png',
-            },
-            {
-                id: 2,
-                login: 'Login2',
-                profilePicture:
-                    'https://cdn.discordapp.com/attachments/630887784185331745/934094537452814396/unknown_5.png',
-            },
-            {
-                id: 1,
-                login: 'Login1',
-                profilePicture:
-                    'https://cdn.discordapp.com/attachments/630887784185331745/934094537452814396/unknown_5.png',
-            },
-            {
-                id: 1,
-                login: 'Login1',
-                profilePicture:
-                    'https://cdn.discordapp.com/attachments/630887784185331745/934094537452814396/unknown_5.png',
-            },
-        ],
-    },
-    {
-        id: 3,
-        name: 'Title',
-        description: 'Description',
-        userList: [
-            {
-                id: 1,
-                login: 'Login1',
-                profilePicture:
-                    'https://cdn.discordapp.com/attachments/630887784185331745/934094537452814396/unknown_5.png',
-            },
-            {
-                id: 2,
-                login: 'Login2',
-                profilePicture:
-                    'https://cdn.discordapp.com/attachments/630887784185331745/934094537452814396/unknown_5.png',
-            },
-            {
-                id: 1,
-                login: 'Login1',
-                profilePicture:
-                    'https://cdn.discordapp.com/attachments/630887784185331745/934094537452814396/unknown_5.png',
-            },
-            {
-                id: 1,
-                login: 'Login1',
-                profilePicture:
-                    'https://cdn.discordapp.com/attachments/630887784185331745/934094537452814396/unknown_5.png',
-            },
-        ],
-    },
-    {
-        id: 3,
-        name: 'Title',
-        description: 'Description',
-        userList: [
-            {
-                id: 1,
-                login: 'Login1',
-                profilePicture:
-                    'https://cdn.discordapp.com/attachments/630887784185331745/934094537452814396/unknown_5.png',
-            },
-            {
-                id: 2,
-                login: 'Login2',
-                profilePicture:
-                    'https://cdn.discordapp.com/attachments/630887784185331745/934094537452814396/unknown_5.png',
-            },
-            {
-                id: 1,
-                login: 'Login1',
-                profilePicture:
-                    'https://cdn.discordapp.com/attachments/630887784185331745/934094537452814396/unknown_5.png',
-            },
-            {
-                id: 1,
-                login: 'Login1',
-                profilePicture:
-                    'https://cdn.discordapp.com/attachments/630887784185331745/934094537452814396/unknown_5.png',
-            },
-        ],
-    },
-    {
-        id: 3,
-        name: 'Title',
-        description: 'Description',
-        userList: [],
-    },
-];
+import { getRooms } from '../api/actions';
 
 function Homepage() {
     const token = localStorage.getItem('accessToken');
     const navigate = useNavigate();
+
+    const [rooms, setRooms] = useState<Room[]>([]);
+
+    useEffect(() => {
+        if (token) {
+            (async () => {
+                const { data } = await getRooms();
+                if (data) {
+                    setRooms(data);
+                }
+            })();
+        }
+    }, [token]);
 
     if (!token) {
         return (
@@ -195,10 +37,11 @@ function Homepage() {
             </Container>
         );
     }
+
     return (
         <Grid container spacing={3}>
             {rooms.map((item) => (
-                <Grid item xl={3} lg={4} md={6} sm={12} xs={12} key={item.id}>
+                <Grid item xl={3} lg={4} md={6} sm={12} xs={12} key={item.uuid}>
                     <RoomCard room={item} />
                 </Grid>
             ))}

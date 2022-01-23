@@ -31,7 +31,7 @@ function RoomCard({ room: item }: RoomCardProps) {
     return (
         <CustomCard
             className={classes.roomCard}
-            onClick={() => navigate(createRoute(Routes.Room, { roomId: item.id }))}
+            onClick={() => navigate(createRoute(Routes.Room, { roomId: item.uuid }))}
         >
             <CardHeader title={item.name} />
             <CardContent>
@@ -39,7 +39,7 @@ function RoomCard({ room: item }: RoomCardProps) {
                     {item.description}
                 </Typography>
                 <AvatarGroup max={3}>
-                    {item.userList.map((user) => (
+                    {item.participants.map((user) => (
                         <Avatar alt={user.profileName} key={user.id} src={createS3Path(user.profilePicture)} />
                     ))}
                 </AvatarGroup>

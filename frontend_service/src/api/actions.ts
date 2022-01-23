@@ -6,6 +6,7 @@ import { AxiosResponse } from 'axios';
 import { UserUpdateRequest } from './types/UserUpdateRequest';
 import { User } from '../types/User';
 import { FileUploadResponse } from './types/FileUploadResponse';
+import { Room } from '../types/Room';
 
 export async function getUser(id: number): Promise<AxiosResponse<User>> {
     return axiosClient.get(`/api/users/${id}`);
@@ -27,4 +28,8 @@ export async function updateUser(id: number, body: UserUpdateRequest): Promise<A
 
 export async function uploadImage(image: File): Promise<AxiosResponse<FileUploadResponse>> {
     return axiosClient.post(`/api/files?name=${image.name}`, image);
+}
+
+export async function getRooms(): Promise<AxiosResponse<Room[]>> {
+    return axiosClient.get('/api/rooms');
 }
