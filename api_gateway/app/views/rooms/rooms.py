@@ -1,3 +1,5 @@
+import logging
+
 from app.models import User, Room, RoomParticipant, database
 from app.schemes.rooms import RoomSchema
 
@@ -106,7 +108,7 @@ class RoomByUUID(MethodView):
             return jsonify({"message": "Edit successful"}), 200
 
 
-@blp.route('/<string:room_id>/participants')
+@blp.route('/<room_id>/participants')
 class RoomByUUIDParticipants(MethodView):
 
     @blp.response(200)
@@ -121,6 +123,10 @@ class RoomByUUIDParticipants(MethodView):
                 return jsonify({"message": "Malformed request"}), 400
 
             try:
+                logging.error(room_id)
+                logging.error(room_id)
+                logging.error(room_id)
+
                 requested_room = Room.get(uuid=room_id)
             except Room.DoesNotExist:
                 return jsonify({"message": "Room does not exist"}), 404
@@ -174,7 +180,6 @@ class RoomByUUIDParticipantsById(MethodView):
 
             try:
                 requested_room = Room.get(uuid=room_id)
-                import logging
                 logging.error("=======================")
                 logging.error(participant_to_remove.id)
                 logging.error(current_user.id)
