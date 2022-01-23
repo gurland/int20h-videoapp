@@ -103,7 +103,7 @@ function RoomPage() {
                         lg={gridItemWidth('lg')}
                         xl={gridItemWidth('xl')}
                     >
-                        <UserCard userItem={item} getRoomInfo={getRoomInfo} />
+                        <UserCard userItem={item} getRoomInfo={getRoomInfo} room={room} />
                     </Grid>
                 ))}
             </Grid>

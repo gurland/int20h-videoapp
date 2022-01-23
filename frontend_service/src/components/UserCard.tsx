@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import { Avatar, Box, IconButton, Menu, MenuItem, Typography } from '@mui/material';
 import MicOffIcon from '@mui/icons-material/MicOff';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
@@ -7,6 +7,8 @@ import { makeStyles } from 'tss-react/mui';
 import { User } from '../types/User';
 import { useParams } from 'react-router-dom';
 import { deleteParticipant } from '../api/actions';
+import { GetRoomResponse } from '../api/types/GetRoomResponse';
+import { store } from '../utils/store';
 
 const useStyles = makeStyles()(() => ({
     userCard: {
@@ -18,13 +20,17 @@ const useStyles = makeStyles()(() => ({
 interface UserCardProps {
     userItem: User;
     getRoomInfo: (roomId: string) => void;
+    room: GetRoomResponse | null;
 }
 
-function UserCard({ userItem, getRoomInfo }: UserCardProps) {
+function UserCard({ userItem, getRoomInfo, room }: UserCardProps) {
     const { classes } = useStyles();
     const { id, profileName, profilePicture } = userItem;
     const { roomId } = useParams();
     const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
+    const {
+        state: { user },
+    } = useContext(store);
 
     const handleCloseMenu = () => setAnchorEl(null);
     const handleOpenMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -51,14 +57,18 @@ function UserCard({ userItem, getRoomInfo }: UserCardProps) {
                     <Avatar alt={profileName} src={profilePicture} sx={{ mr: 1, width: 30, height: 30 }} />
                     <Typography>{profileName}</Typography>
                     <MicOffIcon fontSize="small" sx={{ marginLeft: 1 }} />
-                    <IconButton sx={{ marginLeft: 'auto' }} onClick={handleOpenMenu}>
-                        <MoreVertIcon />
-                    </IconButton>
+                    {user?.id === room?.creator?.id && (
+                        <IconButton sx={{ marginLeft: 'auto' }} onClick={handleOpenMenu}>
+                            <MoreVertIcon />
+                        </IconButton>
+                    )}
                 </Box>
             </CustomCard>
-            <Menu anchorEl={anchorEl} open={!!anchorEl} onClose={handleCloseMenu}>
-                <MenuItem onClick={handleKickUser}>Kick</MenuItem>
-            </Menu>
+            {user?.id === room?.creator?.id && (
+                <Menu anchorEl={anchorEl} open={!!anchorEl} onClose={handleCloseMenu}>
+                    <MenuItem onClick={handleKickUser}>Kick</MenuItem>
+                </Menu>
+            )}
         </>
     );
 }
