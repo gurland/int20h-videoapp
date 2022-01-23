@@ -54,7 +54,7 @@ class UsersById(MethodView):
         identity = get_jwt_identity()
 
         try:
-            current_user = User.get_user_by_login(identity.get("login"))
+            current_user = User.get(login=identity.get("login"))
             requested_user = User.get(id=user_id)
         except User.DoesNotExist:
             return jsonify({"message": "Malformed request"}), 400
