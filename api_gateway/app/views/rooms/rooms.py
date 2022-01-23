@@ -18,8 +18,11 @@ class Rooms(MethodView):
     @blp.response(200)
     @jwt_required()
     def get(self):
-        rooms = Room.select().where(Room.public == True)
-        return jsonify([room.to_dict() for room in rooms])
+        rooms = Room.select().where(Room.public==True)
+        result = []
+        for room in rooms:
+            result.append(room.to_dict())
+        return jsonify(result)
 
     @blp.arguments(RoomSchema, location='json')
     @blp.response(200)
