@@ -57,11 +57,9 @@ const useStyles = makeStyles()((theme) => ({
 
 interface CallControlsBarProps {
     setChatOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    userId: number | undefined;
-    roomId: string | undefined;
 }
 
-function CallControlsBar({ setChatOpen, userId, roomId }: CallControlsBarProps) {
+function CallControlsBar({ setChatOpen }: CallControlsBarProps) {
     const [micOff, setMicOff] = useState(false);
     const [soundOff, setSoundOff] = useState(false);
     const [videoOff, setVideoOff] = useState(false);
@@ -70,12 +68,7 @@ function CallControlsBar({ setChatOpen, userId, roomId }: CallControlsBarProps) 
     const navigate = useNavigate();
 
     const handleDisconnect = () => {
-        if (roomId && userId) {
-            (async () => {
-                await deleteParticipant(roomId, userId);
-                navigate(Routes.Homepage);
-            })();
-        }
+        navigate(Routes.Homepage);
     };
 
     return (

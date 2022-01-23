@@ -109,7 +109,7 @@ function RoomPage() {
                 </Box>
                 <RoomChat />
             </Drawer>
-            <CallControlsBar setChatOpen={setChatOpen} roomId={roomId} userId={user?.id} />
+            <CallControlsBar setChatOpen={setChatOpen} />
         </>
     );
 }
