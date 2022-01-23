@@ -19,7 +19,8 @@ const io = require("socket.io")(server, {
         "http://localhost:4200",
         "http://localhost:4201",
         "http://localhost:4021",
-        "http://pythagorix.com"
+        "http://videoapp.link",
+        "http://157.90.230.141"
     ],
     methods: ["GET", "POST"],
     credentials: true
