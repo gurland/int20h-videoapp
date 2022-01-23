@@ -10,7 +10,6 @@ import ChatIcon from '@mui/icons-material/Chat';
 import CustomCard from './CustomCard';
 import { Box, IconButton } from '@mui/material';
 import { makeStyles } from 'tss-react/mui';
-import { deleteParticipant } from '../api/actions';
 import { useNavigate } from 'react-router-dom';
 import { Routes } from '../constants/routes';
 

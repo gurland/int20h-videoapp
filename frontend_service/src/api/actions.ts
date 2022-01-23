@@ -9,6 +9,7 @@ import { FileUploadResponse } from './types/FileUploadResponse';
 import { Room } from '../types/Room';
 import { CreateRoomRequest } from './types/CreateRoomRequest';
 import { CreateRoomResponse } from './types/CreateRoomResponse';
+import { GetRoomResponse } from './types/GetRoomResponse';
 
 export async function getUser(id: number): Promise<AxiosResponse<User>> {
     return axiosClient.get(`/api/users/${id}`);
@@ -46,4 +47,8 @@ export async function createRoom(body: CreateRoomRequest): Promise<AxiosResponse
 
 export async function deleteParticipant(roomId: string, userId: number) {
     return axiosClient.delete(`/api/rooms/${roomId}/participants/${userId}`);
+}
+
+export async function getRoom(roomId: string): Promise<AxiosResponse<GetRoomResponse>> {
+    return axiosClient.get(`/api/rooms/${roomId}`);
 }
