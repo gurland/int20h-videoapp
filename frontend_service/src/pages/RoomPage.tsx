@@ -8,8 +8,9 @@ import RoomChat from '../components/RoomChat';
 import UserCard from '../components/UserCard';
 import { Breakpoint } from '@mui/system/createTheme/createBreakpoints';
 import { useParams } from 'react-router-dom';
-import { deleteParticipant, joinToRoom } from '../api/actions';
+import { deleteParticipant, getRoom, joinToRoom } from '../api/actions';
 import { store } from '../utils/store';
+import { GetRoomResponse } from '../api/types/GetRoomResponse';
 
 const users: User[] = [
     {
@@ -29,6 +30,7 @@ const useStyles = makeStyles()((theme) => ({
 function RoomPage() {
     const { classes } = useStyles();
     const [chatOpen, setChatOpen] = useState(false);
+    const [room, setRoom] = useState<GetRoomResponse | null>(null);
     const { roomId } = useParams();
     const {
         state: { user },
@@ -37,7 +39,14 @@ function RoomPage() {
     useEffect(() => {
         if (roomId) {
             (async () => {
-                await joinToRoom(roomId);
+                try {
+                    await joinToRoom(roomId);
+                } catch (e) {}
+
+                const { data } = await getRoom(roomId);
+                if (data) {
+                    setRoom(data);
+                }
             })();
         }
 
@@ -79,10 +88,12 @@ function RoomPage() {
         }
     }, []);
 
+    console.log(room);
+
     return (
         <>
             <Grid container spacing={2} justifyContent="center" alignItems="center" sx={{ height: '100%' }}>
-                {users.map((item) => (
+                {room?.participants.map((item) => (
                     <Grid
                         item
                         key={item.id}
@@ -109,7 +120,7 @@ function RoomPage() {
                 </Box>
                 <RoomChat />
             </Drawer>
-            <CallControlsBar setChatOpen={setChatOpen} roomId={roomId} userId={user?.id} />
+            <CallControlsBar setChatOpen={setChatOpen} />
         </>
     );
 }
