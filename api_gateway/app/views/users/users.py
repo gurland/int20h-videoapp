@@ -66,22 +66,37 @@ class UsersById(MethodView):
     @jwt_required()
     def put(self, new_data, user_id):
         identity = get_jwt_identity()
-        profile_picture_path = new_data.get("profile_picture")
 
         try:
             current_user = User.get(login=identity.get("login"))
         except User.DoesNotExist:
             return jsonify({"message": "User does not exist"}), 400
 
-        try:
-            file = File.get(path=profile_picture_path)
-        except File.DoesNotExist:
-            return jsonify({"message": "File does not exist"}), 400
+        if current_user.id != user_id:
+            return jsonify({"message": "You are not allowed"}), 400
 
-        # TODO: Add admin way to edit users
-        if current_user.id == user_id:
+        profile_picture_path = new_data.get("profile_picture")
+        if profile_picture_path:
+            try:
+                file = File.get(path=profile_picture_path)
+            except File.DoesNotExist:
+                return jsonify({"message": "File does not exist"}), 400
+
             current_user.profile_picture = file
             current_user.save()
-            return jsonify({"message": "Edit successful"}), 200
-        else:
-            return jsonify({"message": "You are not allowed"}), 400
+
+        profile_name = new_data.get("profile_name")
+        if profile_name:
+            current_user.profile_name = profile_name
+            current_user.save()
+
+        old_password = new_data.get("old_password")
+        new_password = new_data.get("new_password")
+        if all((old_password, new_password)):
+            if not current_user.verify_password(old_password):
+                return jsonify({"message": "Old password is wrong"}), 400
+            else:
+                current_user.password_hash = bcrypt.hash(new_password)
+                current_user.save()
+
+        return jsonify({"message": "Edit successful"}), 200

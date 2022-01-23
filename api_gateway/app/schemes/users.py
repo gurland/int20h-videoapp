@@ -10,3 +10,6 @@ class RegisterSchema(ma.Schema):
 class EditUserSchema(ma.Schema):
     profile_name = ma.fields.String(required=False, data_key="profileName")
     profile_picture = ma.fields.String(required=False, data_key="profilePicture")
+
+    old_password = ma.fields.String(required=False, data_key="oldPassword")
+    new_password = ma.fields.String(required=False, data_key="newPassword")
