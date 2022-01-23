@@ -1,3 +1,5 @@
+import { User } from './User';
+
 export interface GlobalStore {
-    accessToken: string | null;
+    user: null | User;
 }
