@@ -5,6 +5,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { Actions, store } from '../utils/store';
 import { getUser, updateUser, uploadImage } from '../api/actions';
+import LoadingButton from '@mui/lab/LoadingButton';
 
 type Inputs = { profileName: string; oldPassword: string; newPassword: string };
 
@@ -26,8 +27,10 @@ function ProfilePage() {
     });
 
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
+    const [loading, setLoading] = useState(false);
 
     const handleSaveClick = handleSubmit(async () => {
+        setLoading(true);
         let imagePath = '';
         if (selectedFile) {
             const { data } = await uploadImage(selectedFile);
@@ -41,6 +44,7 @@ function ProfilePage() {
             const { data } = await getUser(user.id);
             dispatch({ type: Actions.SetUser, payload: data });
         }
+        setLoading(false);
     });
 
     const handleAvatarChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -92,9 +96,15 @@ function ProfilePage() {
                     <Typography>{selectedFile?.name}</Typography>
                 </Grid>
                 <Grid item xs={12}>
-                    <Button variant="contained" disableElevation fullWidth onClick={handleSaveClick}>
+                    <LoadingButton
+                        variant="contained"
+                        loading={loading}
+                        disableElevation
+                        fullWidth
+                        onClick={handleSaveClick}
+                    >
                         Save Changes
-                    </Button>
+                    </LoadingButton>
                 </Grid>
             </Grid>
         </Container>

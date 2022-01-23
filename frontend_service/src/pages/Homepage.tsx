@@ -8,8 +8,7 @@ import { Routes } from '../constants/routes';
 const rooms: Room[] = [
     {
         id: 1,
-        maxUsers: 10,
-        title: 'Title',
+        name: 'Title',
         description:
             'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
         userList: [
@@ -29,8 +28,7 @@ const rooms: Room[] = [
     },
     {
         id: 2,
-        maxUsers: 10,
-        title: 'Title',
+        name: 'Title',
         description: 'Description',
         userList: [
             {
@@ -49,40 +47,7 @@ const rooms: Room[] = [
     },
     {
         id: 3,
-        maxUsers: 10,
-        title: 'Title',
-        description: 'Description',
-        userList: [
-            {
-                id: 1,
-                login: 'Login1',
-                profilePicture:
-                    'https://cdn.discordapp.com/attachments/630887784185331745/934094537452814396/unknown_5.png',
-            },
-            {
-                id: 2,
-                login: 'Login2',
-                profilePicture:
-                    'https://cdn.discordapp.com/attachments/630887784185331745/934094537452814396/unknown_5.png',
-            },
-            {
-                id: 1,
-                login: 'Login1',
-                profilePicture:
-                    'https://cdn.discordapp.com/attachments/630887784185331745/934094537452814396/unknown_5.png',
-            },
-            {
-                id: 1,
-                login: 'Login1',
-                profilePicture:
-                    'https://cdn.discordapp.com/attachments/630887784185331745/934094537452814396/unknown_5.png',
-            },
-        ],
-    },
-    {
-        id: 3,
-        maxUsers: 10,
-        title: 'Title',
+        name: 'Title',
         description: 'Description',
         userList: [
             {
@@ -113,8 +78,7 @@ const rooms: Room[] = [
     },
     {
         id: 3,
-        maxUsers: 10,
-        title: 'Title',
+        name: 'Title',
         description: 'Description',
         userList: [
             {
@@ -145,8 +109,7 @@ const rooms: Room[] = [
     },
     {
         id: 3,
-        maxUsers: 10,
-        title: 'Title',
+        name: 'Title',
         description: 'Description',
         userList: [
             {
@@ -177,8 +140,38 @@ const rooms: Room[] = [
     },
     {
         id: 3,
-        maxUsers: 10,
-        title: 'Title',
+        name: 'Title',
+        description: 'Description',
+        userList: [
+            {
+                id: 1,
+                login: 'Login1',
+                profilePicture:
+                    'https://cdn.discordapp.com/attachments/630887784185331745/934094537452814396/unknown_5.png',
+            },
+            {
+                id: 2,
+                login: 'Login2',
+                profilePicture:
+                    'https://cdn.discordapp.com/attachments/630887784185331745/934094537452814396/unknown_5.png',
+            },
+            {
+                id: 1,
+                login: 'Login1',
+                profilePicture:
+                    'https://cdn.discordapp.com/attachments/630887784185331745/934094537452814396/unknown_5.png',
+            },
+            {
+                id: 1,
+                login: 'Login1',
+                profilePicture:
+                    'https://cdn.discordapp.com/attachments/630887784185331745/934094537452814396/unknown_5.png',
+            },
+        ],
+    },
+    {
+        id: 3,
+        name: 'Title',
         description: 'Description',
         userList: [],
     },
