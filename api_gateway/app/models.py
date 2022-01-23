@@ -85,6 +85,16 @@ class RoomParticipant(BaseModel):
     room = ForeignKeyField(Room, backref="room_participants")
     participant = ForeignKeyField(User, backref="room_participants")
 
+    @classmethod
+    def kick_participant(cls, room_id, user_id):
+        all_participants = cls.select().where(RoomParticipant.room.id == room_id)
+        for participant in all_participants:
+            if participant.participant.id == user_id:
+                participant.delete_instance()
+                return True
+
+        return False
+
 
 database.create_tables([
     User,

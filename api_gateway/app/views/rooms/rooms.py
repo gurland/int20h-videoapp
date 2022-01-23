@@ -185,15 +185,16 @@ class RoomByUUIDParticipantsById(MethodView):
                 logging.error(participant_to_remove.id)
                 logging.error(current_user.id)
 
-                if current_user.id != requested_room.creator.id or current_user.id != participant_to_remove.id:
+                if current_user.id == requested_room.creator.id:
+                    is_kicked = RoomParticipant.kick_participant(room_id, participant_id)
+                elif current_user.id != participant_to_remove.id:
+                    is_kicked = RoomParticipant.kick_participant(room_id, participant_id)
+                else:
                     return jsonify({"message": "You don't have rights to kick other participants"}), 400
 
+                if is_kicked:
+                    return jsonify({"message": "User was kicked"}), 200
+                else:
+                    return jsonify({"message": "User was not participant anymore"}), 404
             except Room.DoesNotExist:
                 return jsonify({"message": "Room does not exist"}), 404
-
-            for room_participant in requested_room.room_participants:
-                if room_participant.participant.id == participant_to_remove.id:
-                    room_participant.delete_instance()
-                    return jsonify({"message": "User was kicked"}), 200
-
-            return jsonify({"message": "User was not participant anymore"}), 404
