@@ -10,3 +10,5 @@ DB_PORT = os.getenv("DB_PORT", "5432")
 
 
 S3_BUCKET = os.getenv("S3_BUCKET", "videoapp-files")
+AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID", "")
+AWS_ACCESS_SECRET_KEY = os.getenv("AWS_ACCESS_SECRET_KEY", "")

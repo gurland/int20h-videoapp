@@ -69,7 +69,7 @@ class UsersById(MethodView):
         profile_picture_path = new_data.get("profile_picture")
 
         try:
-            current_user = User.login(identity.get("email"))
+            current_user = User.get(login=identity.get("login"))
         except User.DoesNotExist:
             return jsonify({"message": "User does not exist"}), 400
 
