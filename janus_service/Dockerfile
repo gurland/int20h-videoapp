@@ -12,4 +12,7 @@ RUN sh autogen.sh && sh configure --prefix=/opt/janus
 
 RUN make && make install && make configs
 
+EXPOSE 8088
+EXPOSE 8188
+
 CMD ["/opt/janus/bin/janus"]
