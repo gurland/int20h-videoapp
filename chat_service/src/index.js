@@ -59,6 +59,9 @@ io.use(function(socket, next){
 
   Chat.findOneOrCreate({roomId: socket.roomId}, (err, chat) =>
     {
+      console.log('==============');
+      console.log(err);
+      console.log(chat);
       socket.emit('message-broadcast', chat.messages);
     }
   );
