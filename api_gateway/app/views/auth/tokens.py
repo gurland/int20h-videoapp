@@ -27,7 +27,7 @@ class Tokens(MethodView):
             password = auth.get('password')
 
             try:
-                user = User.get_user_by_login(login=login)
+                user = User.get(login=login)
                 if not user.verify_password(password):
                     return jsonify({"message": "error, provided credentials are wrong"}), 401
                 else:

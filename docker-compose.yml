@@ -22,6 +22,7 @@ services:
       DB_PASS: testpassword1234
       DB_HOST: db
       DB_PORT: 5432
+      S3_BUCKET: videoapp-files
 
   redis:
     image: redis
