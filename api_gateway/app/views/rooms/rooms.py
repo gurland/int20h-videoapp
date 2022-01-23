@@ -7,7 +7,7 @@ from flask_smorest import Blueprint
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
 blp = Blueprint(
-    'users', __name__, url_prefix='/api/users',
+    'users', __name__, url_prefix='/api/rooms',
     description='Upload files endpoints'
 )
 
