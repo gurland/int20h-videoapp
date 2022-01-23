@@ -1,5 +1,5 @@
 from app.models import User, Room, RoomParticipant
-from app.schemes.rooms import RoomSchema, RemoveParticipantSchema
+from app.schemes.rooms import RoomSchema
 
 from flask import jsonify
 from flask.views import MethodView
@@ -7,7 +7,7 @@ from flask_smorest import Blueprint
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
 blp = Blueprint(
-    'users', __name__, url_prefix='/api/rooms',
+    'rooms', __name__, url_prefix='/api/rooms',
     description='Upload files endpoints'
 )
 
@@ -124,15 +124,42 @@ class RoomByUUIDParticipants(MethodView):
         else:
             return jsonify([room_participant.to_dict() for room_participant in room_participants])
 
-    @blp.arguments(RemoveParticipantSchema, location='json')
     @blp.response(200)
     @jwt_required()
-    def delete(self, remove_participant_data, room_id):
+    def post(self, room_id):
+        identity = get_jwt_identity()
+
+        try:
+            current_user = User.get_user_by_login(identity.get("login"))
+        except User.DoesNotExist:
+            return jsonify({"message": "Malformed request"}), 400
+
+        try:
+            requested_room = Room.get(uuid=room_id)
+        except Room.DoesNotExist:
+            return jsonify({"message": "Room does not exist"}), 404
+
+        room_participants = (room_participant.participant for room_participant in requested_room.room_participants)
+        if current_user in room_participants:
+            return jsonify({"message": "User is already a participant"}), 409
+        else:
+            RoomParticipant.create(
+                room=requested_room,
+                participant=current_user
+            )
+            return jsonify({"message": "You have joined the room"}), 200
+
+
+@blp.route('/<string:room_id>/participants/<int:participant_id>')
+class RoomByUUIDParticipantsById(MethodView):
+    @blp.response(200)
+    @jwt_required()
+    def delete(self, room_id, participant_id):
         identity = get_jwt_identity()
 
         try:
             current_user = User.get(login=identity.get("login"))
-            participant_to_remove = User.get(id=remove_participant_data.get("participant_id"))
+            participant_to_remove = User.get(id=participant_id)
         except User.DoesNotExist:
             return jsonify({"message": "User does not exist"}), 400
 
