@@ -176,9 +176,8 @@ class RoomByUUIDParticipantsById(MethodView):
         except Room.DoesNotExist:
             return jsonify({"message": "Room does not exist"}), 404
 
-        room_participants = (room_participant.participant for room_participant in requested_room.room_participants)
-        for room_participant in room_participants:
-            if room_participant == participant_to_remove:
+        for room_participant in requested_room.room_participants:
+            if room_participant.participant == participant_to_remove:
                 room_participant.delete_instance()
                 return jsonify({"message": "User was kicked"}), 200
 
