@@ -1,8 +1,7 @@
 import React from 'react';
 import { createRoute, createS3Path } from '../utils/common';
 import { Routes } from '../constants/routes';
-import { Avatar, AvatarGroup, Box, CardActions, CardContent, CardHeader, Typography } from '@mui/material';
-import PersonIcon from '@mui/icons-material/Person';
+import { Avatar, AvatarGroup, CardContent, CardHeader, Typography } from '@mui/material';
 import CustomCard from './CustomCard';
 import { useNavigate } from 'react-router-dom';
 import { makeStyles } from 'tss-react/mui';
@@ -34,7 +33,7 @@ function RoomCard({ room: item }: RoomCardProps) {
             className={classes.roomCard}
             onClick={() => navigate(createRoute(Routes.Room, { roomId: item.id }))}
         >
-            <CardHeader title={item.title} />
+            <CardHeader title={item.name} />
             <CardContent>
                 <Typography component="p" variant="body2" className={classes.description}>
                     {item.description}
@@ -45,14 +44,6 @@ function RoomCard({ room: item }: RoomCardProps) {
                     ))}
                 </AvatarGroup>
             </CardContent>
-            <CardActions sx={{ alignSelf: 'self-end', marginTop: 'auto' }}>
-                <Box display="flex" alignItems="center" justifyContent="center">
-                    <Typography variant="body2">
-                        {item.userList.length} / {item.maxUsers}
-                    </Typography>
-                    <PersonIcon fontSize="small" sx={{ marginLeft: 1 }} />
-                </Box>
-            </CardActions>
         </CustomCard>
     );
 }
