@@ -40,7 +40,7 @@ class Rooms(MethodView):
                 creator=current_user
             )
 
-            return jsonify({"message": f"Successfully created room with ID: {room.uuid}"}), 200
+            return jsonify({"message": f"Successfully created room with ID: {room.uuid}", "roomId": room.uuid}), 200
 
         except:
             return jsonify({"message": "Malformed request!"}), 400
