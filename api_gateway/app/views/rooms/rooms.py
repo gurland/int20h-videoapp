@@ -181,6 +181,7 @@ class RoomByUUIDParticipantsById(MethodView):
             try:
                 requested_room = Room.get(uuid=room_id)
                 logging.error("=======================")
+                logging.error(room_id)
                 logging.error(participant_to_remove.id)
                 logging.error(current_user.id)
 
@@ -191,7 +192,7 @@ class RoomByUUIDParticipantsById(MethodView):
                 return jsonify({"message": "Room does not exist"}), 404
 
             for room_participant in requested_room.room_participants:
-                if room_participant.participant == participant_to_remove:
+                if room_participant.participant.id == participant_to_remove.id:
                     room_participant.delete_instance()
                     return jsonify({"message": "User was kicked"}), 200
 
