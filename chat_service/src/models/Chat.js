@@ -24,7 +24,7 @@ const chatSchema = new Schema(
 	{
 		roomId:
 		{
-			type: Number
+			type: String
 		},
     messages:[messageSchema]
 	},
