@@ -67,12 +67,12 @@ io.use(function(socket, next){
   );
 
   socket.on('message', (msg) => {
-    Chat.findOneOrCreate({roomId: socket.roomId}, (err, chat) => {
+    Chat.findOneOrCreate({roomId: socket.roomId}, async (err, chat) => {
       msg.senderId = socket.userId;
       console.log(socket.decoded);
-      msg.senderName = socket.decoded.profileName;
+      msg.senderName = socket.decoded.sub.profile_name;
       chat.messages.push(msg);
-      chat.save();
+      await chat.save();
       io.to(chatRoom).emit('message-broadcast', chat.messages);
     })
   });
