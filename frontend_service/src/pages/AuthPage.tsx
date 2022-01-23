@@ -1,5 +1,5 @@
-import React, { useContext } from 'react';
-import { Button, Container, Grid, TextField } from '@mui/material';
+import React, { useContext, useState } from 'react';
+import { Container, Grid, TextField } from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -9,6 +9,7 @@ import { Actions, store } from '../utils/store';
 import { User } from '../types/User';
 import { Routes } from '../constants/routes';
 import { useNavigate } from 'react-router-dom';
+import { LoadingButton } from '@mui/lab';
 
 type Inputs = { login: string; password: string };
 
@@ -26,8 +27,11 @@ function AuthPage() {
     } = useForm<Inputs>({ defaultValues: { login: '', password: '' }, resolver: yupResolver(schema) });
     const { dispatch } = useContext(store);
     const navigate = useNavigate();
+    const [loadingLogin, setLoadingLogin] = useState(false);
+    const [loadingReg, setLoadingReg] = useState(false);
 
     const handleLogin = handleSubmit(async () => {
+        setLoadingLogin(true);
         const { password, login } = getValues();
         const {
             data: { token },
@@ -36,9 +40,11 @@ function AuthPage() {
         const { sub: userData } = jwt_decode<{ sub: User }>(token);
         dispatch({ type: Actions.SetUser, payload: userData });
         navigate(Routes.Homepage);
+        setLoadingLogin(false);
     });
 
     const handleSignUp = handleSubmit(async () => {
+        setLoadingReg(true);
         const { password, login } = getValues();
         await signUp(login, password);
         const {
@@ -48,6 +54,7 @@ function AuthPage() {
         const { sub: userData } = jwt_decode<{ sub: User }>(token);
         dispatch({ type: Actions.SetUser, payload: userData });
         navigate(Routes.Homepage);
+        setLoadingReg(false);
     });
 
     return (
@@ -85,14 +92,26 @@ function AuthPage() {
                     />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                    <Button variant="contained" disableElevation fullWidth onClick={handleLogin}>
+                    <LoadingButton
+                        loading={loadingLogin}
+                        variant="contained"
+                        disableElevation
+                        fullWidth
+                        onClick={handleLogin}
+                    >
                         Log In
-                    </Button>
+                    </LoadingButton>
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                    <Button variant="outlined" disableElevation fullWidth onClick={handleSignUp}>
+                    <LoadingButton
+                        loading={loadingReg}
+                        variant="outlined"
+                        disableElevation
+                        fullWidth
+                        onClick={handleSignUp}
+                    >
                         Sign Up
-                    </Button>
+                    </LoadingButton>
                 </Grid>
             </Grid>
         </Container>
