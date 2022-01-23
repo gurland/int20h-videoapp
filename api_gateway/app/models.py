@@ -70,7 +70,7 @@ class Room(BaseModel):
     creator = ForeignKeyField(User, backref="rooms")
 
     def to_dict(self):
-        participants = RoomParticipant.select().where(RoomParticipant.room == self)
+        participants = [participant.participant for participant in RoomParticipant.select().where(RoomParticipant.room == self)]
 
         return {
             "uuid": self.uuid,

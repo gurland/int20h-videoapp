@@ -28,7 +28,7 @@ class Rooms(MethodView):
         identity = get_jwt_identity()
 
         try:
-            current_user = User.get_user_by_login(identity.get("login"))
+            current_user = User.get(login=identity.get("login"))
         except User.DoesNotExist:
             return jsonify({"message": "Malformed request"}), 400
 
@@ -55,7 +55,7 @@ class RoomByUUID(MethodView):
         identity = get_jwt_identity()
 
         try:
-            current_user = User.get_user_by_login(identity.get("login"))
+            current_user = User.get(login=identity.get("login"))
         except User.DoesNotExist:
             return jsonify({"message": "Malformed request"}), 400
 
@@ -109,7 +109,7 @@ class RoomByUUIDParticipants(MethodView):
         identity = get_jwt_identity()
 
         try:
-            current_user = User.get_user_by_login(identity.get("login"))
+            current_user = User.get(login=identity.get("login"))
         except User.DoesNotExist:
             return jsonify({"message": "Malformed request"}), 400
 
@@ -130,7 +130,7 @@ class RoomByUUIDParticipants(MethodView):
         identity = get_jwt_identity()
 
         try:
-            current_user = User.get_user_by_login(identity.get("login"))
+            current_user = User.get(login=identity.get("login"))
         except User.DoesNotExist:
             return jsonify({"message": "Malformed request"}), 400
 
