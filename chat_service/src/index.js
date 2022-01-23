@@ -73,7 +73,7 @@ io.use(function(socket, next){
       msg.senderName = socket.decoded.profileName;
       chat.messages.push(msg);
       chat.save();
-      io.to(chatRoom).emit('message-broadcast', [msg]);
+      io.to(chatRoom).emit('message-broadcast', chat.messages);
     })
   });
 });

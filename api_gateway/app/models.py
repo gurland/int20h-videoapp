@@ -3,23 +3,6 @@ from app.settings import *
 from datetime import datetime
 import uuid
 
-from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import scoped_session, sessionmaker
-
-
-POSTGRES_URI = (
-    f"postgresql://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/"
-    f"{DB_NAME}"
-)
-
-engine = create_engine(POSTGRES_URI, echo=True)
-Session = sessionmaker(autoflush=False, bind=engine)
-session = scoped_session(Session)
-Base = declarative_base()
-Base.query = session.query_property()
-
-
 from peewee import PostgresqlDatabase, IntegerField, CharField, DateField, BooleanField, TextField, ForeignKeyField, UUIDField, DecimalField, TimeField, DateTimeField
 from playhouse.signals import Model, post_save
 from passlib.hash import bcrypt
@@ -45,6 +28,35 @@ class File(BaseModel):
         }
 
 
+class User(BaseModel):
+    login = CharField(unique=True)
+    password_hash = CharField()
+    profile_name = CharField()
+    profile_picture = ForeignKeyField(File, backref="users", null=True)
+
+    @classmethod
+    def get_user_by_login(cls, login):
+        if login:
+            return cls.get(login=login)
+
+    def to_dict(self):
+        response_dict = {
+            "id": self.id,
+            "login": self.login,
+            "profileName": self.profile_name,
+        }
+
+        if self.profile_picture:
+            response_dict["profilePicture"] = self.profile_picture.path
+
+        return response_dict
+
+    def verify_password(self, plain_password):
+        return bcrypt.verify(plain_password, self.password_hash)
+
+    def create_jwt_token(self):
+        token_payload = {"id": self.id, "login": self.login, "profile_name": self.profile_name}
+        return create_access_token(token_payload)
 
 
 class Room(BaseModel):
