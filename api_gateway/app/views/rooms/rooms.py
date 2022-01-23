@@ -1,5 +1,5 @@
 from app.models import User, Room, RoomParticipant
-from app.schemes.rooms import RoomSchema, RemoveParticipantSchema
+from app.schemes.rooms import RoomSchema
 
 from flask import jsonify
 from flask.views import MethodView
