@@ -1,6 +1,5 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { Box, Drawer, Grid, IconButton } from '@mui/material';
-import { User } from '../types/User';
 import CallControlsBar from '../components/CallControlsBar';
 import { makeStyles } from 'tss-react/mui';
 import CloseIcon from '@mui/icons-material/Close';
@@ -11,15 +10,6 @@ import { useParams } from 'react-router-dom';
 import { deleteParticipant, getRoom, joinToRoom } from '../api/actions';
 import { store } from '../utils/store';
 import { GetRoomResponse } from '../api/types/GetRoomResponse';
-
-const users: User[] = [
-    {
-        id: 1,
-        login: 'test',
-        profileName: 'Test test',
-        profilePicture: '',
-    },
-];
 
 const useStyles = makeStyles()((theme) => ({
     drawerPaper: {
@@ -36,17 +26,26 @@ function RoomPage() {
         state: { user },
     } = useContext(store);
 
+    const users = room?.participants || [];
+
+    const joinRequest = async (roomId: string) => {
+        try {
+            await joinToRoom(roomId);
+        } catch (e) {}
+    };
+
+    const getRoomInfo = async (roomId: string) => {
+        const { data } = await getRoom(roomId);
+        if (data) {
+            setRoom(data);
+        }
+    };
+
     useEffect(() => {
         if (roomId) {
             (async () => {
-                try {
-                    await joinToRoom(roomId);
-                } catch (e) {}
-
-                const { data } = await getRoom(roomId);
-                if (data) {
-                    setRoom(data);
-                }
+                await joinRequest(roomId);
+                await getRoomInfo(roomId);
             })();
         }
 
@@ -61,39 +60,40 @@ function RoomPage() {
 
     const handleDrawerClose = () => setChatOpen(false);
 
-    const gridItemWidth = useCallback((breakpoint: Breakpoint) => {
-        switch (breakpoint) {
-            case 'xl':
-                if (users.length === 1) {
-                    return 9;
-                }
-                return 12 / users.length < 4 ? 4 : 12 / users.length;
-            case 'lg':
-                if (users.length === 1) {
-                    return 9;
-                }
-                return 12 / users.length < 5 ? 5 : 12 / users.length;
-            case 'md':
-                if (users.length === 1) {
+    const gridItemWidth = useCallback(
+        (breakpoint: Breakpoint) => {
+            switch (breakpoint) {
+                case 'xl':
+                    if (users.length === 1) {
+                        return 9;
+                    }
+                    return 12 / users.length < 4 ? 4 : 12 / users.length;
+                case 'lg':
+                    if (users.length === 1) {
+                        return 9;
+                    }
+                    return 12 / users.length < 5 ? 5 : 12 / users.length;
+                case 'md':
+                    if (users.length === 1) {
+                        return 12;
+                    }
+                    return 12 / users.length < 6 ? 6 : 12 / users.length;
+                case 'sm':
+                    if (users.length === 1) {
+                        return 12;
+                    }
+                    return 12 / users.length < 8 ? 8 : 12 / users.length;
+                case 'xs':
                     return 12;
-                }
-                return 12 / users.length < 6 ? 6 : 12 / users.length;
-            case 'sm':
-                if (users.length === 1) {
-                    return 12;
-                }
-                return 12 / users.length < 8 ? 8 : 12 / users.length;
-            case 'xs':
-                return 12;
-        }
-    }, []);
-
-    console.log(room);
+            }
+        },
+        [users.length],
+    );
 
     return (
         <>
             <Grid container spacing={2} justifyContent="center" alignItems="center" sx={{ height: '100%' }}>
-                {room?.participants.map((item) => (
+                {users.map((item) => (
                     <Grid
                         item
                         key={item.id}
@@ -103,7 +103,7 @@ function RoomPage() {
                         lg={gridItemWidth('lg')}
                         xl={gridItemWidth('xl')}
                     >
-                        <UserCard userItem={item} />
+                        <UserCard userItem={item} getRoomInfo={getRoomInfo} />
                     </Grid>
                 ))}
             </Grid>
