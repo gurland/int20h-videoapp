@@ -76,6 +76,7 @@ class Room(BaseModel):
             "uuid": self.uuid,
             "name": self.name,
             "description": self.name,
+            "creator": self.creator.to_dict(),
             "participants": [participant.to_dict() for participant in participants]
         }
 

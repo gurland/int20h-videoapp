@@ -40,7 +40,7 @@ class Rooms(MethodView):
                 creator=current_user
             )
 
-            return jsonify({"message": f"Successfully created room with ID: {room.uuid}"}), 200
+            return jsonify({"message": f"Successfully created room with ID: {room.uuid}", "roomId": room.uuid}), 200
 
         except:
             return jsonify({"message": "Malformed request!"}), 400
@@ -165,7 +165,11 @@ class RoomByUUIDParticipantsById(MethodView):
 
         try:
             requested_room = Room.get(uuid=room_id)
-            if current_user != requested_room.creator or current_user.id != participant_id:
+            print("=======================")
+            print(participant_to_remove.id)
+            print(current_user.id)
+
+            if current_user != requested_room.creator or current_user != participant_to_remove:
                 return jsonify({"message": "You don't have rights to kick other participants"}), 400
 
         except Room.DoesNotExist:
