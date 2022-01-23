@@ -10,6 +10,7 @@ import { useParams } from 'react-router-dom';
 import { deleteParticipant, getRoom, joinToRoom } from '../api/actions';
 import { store } from '../utils/store';
 import { GetRoomResponse } from '../api/types/GetRoomResponse';
+import { useChat } from '../utils/hooks/useChat';
 
 const useStyles = makeStyles()((theme) => ({
     drawerPaper: {
@@ -27,6 +28,8 @@ function RoomPage() {
     } = useContext(store);
 
     const users = room?.participants || [];
+
+    const { messages, sendMessage } = useChat(roomId as string);
 
     const joinRequest = async (roomId: string) => {
         try {
@@ -118,7 +121,7 @@ function RoomPage() {
                 <Box>
                     <IconButton onClick={handleDrawerClose}>{<CloseIcon />}</IconButton>
                 </Box>
-                <RoomChat roomId={roomId} />
+                <RoomChat messages={messages} sendMessage={sendMessage} />
             </Drawer>
             <CallControlsBar setChatOpen={setChatOpen} />
         </>

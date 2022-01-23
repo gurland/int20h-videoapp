@@ -1,18 +1,18 @@
 import React, { useContext } from 'react';
 import MessageList from './MessageList';
 import ChatInput from './ChatInput';
-import { useChat } from '../utils/hooks/useChat';
 import { store } from '../utils/store';
+import { ChatMessage } from '../types/ChatMessage';
 
 interface RoomChatProps {
-    roomId: string | undefined;
+    messages: ChatMessage[];
+    sendMessage: (message: string, senderName?: string) => void;
 }
 
-function RoomChat({ roomId }: RoomChatProps) {
+function RoomChat({ messages, sendMessage }: RoomChatProps) {
     const {
         state: { user },
     } = useContext(store);
-    const { messages, sendMessage } = useChat(roomId as string);
 
     const handleMessageSend = (message: string) => {
         sendMessage(message, user?.profileName);
