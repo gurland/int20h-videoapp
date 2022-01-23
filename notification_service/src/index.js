@@ -20,7 +20,8 @@ const io = require("socket.io")(server, {
         "http://localhost:4201",
         "http://localhost:4021",
         "http://videoapp.link",
-        "http://157.90.230.141"
+        "http://157.90.230.141",
+        "http://localhost:3000"
     ],
     methods: ["GET", "POST"],
     credentials: true
