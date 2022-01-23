@@ -1,1 +1,50 @@
-# int20h-videoapp
+# Video Application
+Repository for INT20H 2022 test task made by `U+200F` team.
+Create rooms, with text, video and audio chats.
+
+## Demo
+[Live version of website](http://157.90.230.141//)
+
+![Main page](https://i.imgur.com/uTJXnOf.png)
+![Video Room](https://i.imgur.com/uTJXnOf.png)
+
+## Features
+- Single Page Application
+- Material design
+- Kick users as creator
+- Text chat
+- Profile avatars & room descriptions
+
+## Technology stack
+- Python + Flask + Smorest + Peewee
+- Socket.io + Node.JS + MongoDB
+- React.js + Material Ui
+- Docker + Docker Compose
+- Nginx
+
+## How to run
+
+### Prerequisite
+1. Install [Docker](https://docs.docker.com/get-docker/)
+2. Install [Docker-compose](https://docs.docker.com/compose/install/)
+
+### Download & Run
+```sh
+git clone https://github.com/gurland/int20h-videoapp.git
+cd goods-aggregator
+docker-compose up --build
+```
+
+## Contributors
+
+- [Stanislav Bobokalo](https://github.com/gurland/)
+
+- [Oleksandr Semeniuk](https://github.com/dvoyakiy)
+
+- [Roman Matuk](https://github.com/r666666)
+
+- [Kostiantyn Pasalskyi](https://github.com/kiririnou)
+
+
+## License
+[GPL-3.0 License](https://github.com/gurland/int20h-videoapp/blob/main/LICENSE)

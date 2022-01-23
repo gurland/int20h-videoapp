@@ -1,7 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Button from '@mui/material/Button';
 import { makeStyles } from 'tss-react/mui';
-import { Typography } from '@mui/material';
+import { Avatar, Box, IconButton, Typography } from '@mui/material';
+import { Link, useNavigate } from 'react-router-dom';
+import { Routes } from '../constants/routes';
+import { Actions, store } from '../utils/store';
+import LogoutIcon from '@mui/icons-material/Logout';
+import { createS3Path } from '../utils/common';
 
 const useStyles = makeStyles()((theme) => ({
     navbar: {
@@ -9,6 +14,7 @@ const useStyles = makeStyles()((theme) => ({
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: theme.spacing(2, 4),
+        transition: 'padding 0.2s ease-in-out',
         [theme.breakpoints.down('md')]: {
             padding: theme.spacing(2, 2),
         },
@@ -17,13 +23,45 @@ const useStyles = makeStyles()((theme) => ({
 
 function Header() {
     const { classes } = useStyles();
+    const {
+        state: { user },
+        dispatch,
+    } = useContext(store);
+    const navigate = useNavigate();
+
+    const handleLogOut = () => {
+        localStorage.removeItem('accessToken');
+        dispatch({ type: Actions.SetUser, payload: null });
+        navigate(Routes.Homepage);
+    };
 
     return (
         <div className={classes.navbar}>
-            <Typography variant="h4">Title</Typography>
-            <Button variant="contained" disableElevation sx={{ borderRadius: 16, mr: 1 }}>
-                Create room
-            </Button>
+            <Link style={{ textDecoration: 'none', color: 'inherit' }} to={Routes.Homepage}>
+                <Typography variant="h4">
+                    <i>
+                        <b>Video</b>
+                    </i>
+                    Chat
+                </Typography>
+            </Link>
+            <Box display="flex">
+                {!!user && (
+                    <>
+                        <Link to={Routes.CreateRoom} style={{ textDecoration: 'none' }}>
+                            <Button variant="contained" disableElevation sx={{ mr: 3 }}>
+                                Create room
+                            </Button>
+                        </Link>
+                        <Link to={Routes.Profile}>
+                            <Avatar src={createS3Path(user.profilePicture)} />
+                        </Link>
+                        <IconButton onClick={handleLogOut} sx={{ marginLeft: 2 }}>
+                            <LogoutIcon />
+                        </IconButton>
+                    </>
+                )}
+            </Box>
         </div>
     );
 }
