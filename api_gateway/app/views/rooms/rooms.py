@@ -165,8 +165,8 @@ class RoomByUUIDParticipantsById(MethodView):
 
         try:
             requested_room = Room.get(uuid=room_id)
-            if current_user != requested_room.creator:
-                return jsonify({"message": "You don't have rights to kick participants"}), 400
+            if current_user != requested_room.creator or current_user.id != participant_id:
+                return jsonify({"message": "You don't have rights to kick other participants"}), 400
 
         except Room.DoesNotExist:
             return jsonify({"message": "Room does not exist"}), 404
