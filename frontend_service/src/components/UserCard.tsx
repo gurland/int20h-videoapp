@@ -21,9 +21,10 @@ interface UserCardProps {
     userItem: User;
     getRoomInfo: (roomId: string) => void;
     room: GetRoomResponse | null;
+    localVideoRef: React.Ref<HTMLVideoElement>;
 }
 
-function UserCard({ userItem, getRoomInfo, room }: UserCardProps) {
+function UserCard({ userItem, getRoomInfo, room, localVideoRef }: UserCardProps) {
     const { classes } = useStyles();
     const { id, profileName, profilePicture } = userItem;
     const { roomId } = useParams();
@@ -50,7 +51,13 @@ function UserCard({ userItem, getRoomInfo, room }: UserCardProps) {
     return (
         <>
             <CustomCard key={id} className={classes.userCard}>
-                <video autoPlay muted controls>
+                <video
+                    id={`user-video-${id}`}
+                    autoPlay
+                    muted
+                    controls
+                    ref={user?.id === id ? localVideoRef : undefined}
+                >
                     <source src="https://shattereddisk.github.io/rickroll/rickroll.mp4" type="video/mp4" />
                 </video>
                 <Box display="flex" mt={1} alignItems="center">

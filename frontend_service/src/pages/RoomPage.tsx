@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { Box, Drawer, Grid, IconButton } from '@mui/material';
 import CallControlsBar from '../components/CallControlsBar';
 import { makeStyles } from 'tss-react/mui';
@@ -10,7 +10,9 @@ import { useParams } from 'react-router-dom';
 import { deleteParticipant, getRoom, joinToRoom } from '../api/actions';
 import { store } from '../utils/store';
 import { GetRoomResponse } from '../api/types/GetRoomResponse';
-import { useChat } from '../utils/hooks/useChat';
+import { initPeerToPeer } from '../utils/p2pHelpers';
+import { io, Socket } from 'socket.io-client';
+import { ChatMessage } from '../types/ChatMessage';
 
 const useStyles = makeStyles()((theme) => ({
     drawerPaper: {
@@ -28,13 +30,23 @@ function RoomPage() {
     } = useContext(store);
 
     const users = room?.participants || [];
-
-    const { messages, sendMessage } = useChat(roomId as string);
+    const localVideoRef = useRef(null);
+    const socketRef = useRef<Socket | null>(null);
+    const [messages, setMessages] = useState<ChatMessage[]>([]);
+    const mapped = useRef({});
+    const peers = useRef({});
+    const muteButtonRef = useRef<HTMLButtonElement | null>(null);
+    const vidButtonRef = useRef<HTMLButtonElement | null>(null);
+    console.log(peers.current);
 
     const joinRequest = async (roomId: string) => {
         try {
             await joinToRoom(roomId);
         } catch (e) {}
+    };
+
+    const sendMessage = (message: string, senderName?: string) => {
+        socketRef.current?.emit('message', { messageType: 'text', content: message, senderName });
     };
 
     const getRoomInfo = async (roomId: string) => {
@@ -45,14 +57,42 @@ function RoomPage() {
     };
 
     useEffect(() => {
+        socketRef.current = io('http://157.90.230.141', {
+            path: '/ws/chat',
+            query: {
+                token: localStorage.getItem('accessToken'),
+                roomId,
+            },
+        });
+
+        socketRef.current?.on('message-broadcast', (data) => {
+            setMessages(data);
+        });
+
+        socketRef.current.on('join', (a: any[][]) => {
+            a.forEach(([userId, socketId]) => {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                mapped.current[socketId] = userId;
+            });
+        });
+
         if (roomId) {
             (async () => {
                 await joinRequest(roomId);
                 await getRoomInfo(roomId);
+                initPeerToPeer(
+                    socketRef.current as Socket,
+                    localVideoRef.current as unknown as HTMLVideoElement,
+                    peers.current,
+                    mapped.current,
+                );
             })();
         }
 
         return () => {
+            socketRef.current?.disconnect();
+
             if (roomId && user?.id) {
                 (async () => {
                     await deleteParticipant(roomId, user.id);
@@ -106,7 +146,7 @@ function RoomPage() {
                         lg={gridItemWidth('lg')}
                         xl={gridItemWidth('xl')}
                     >
-                        <UserCard userItem={item} getRoomInfo={getRoomInfo} room={room} />
+                        <UserCard userItem={item} getRoomInfo={getRoomInfo} room={room} localVideoRef={localVideoRef} />
                     </Grid>
                 ))}
             </Grid>
@@ -123,7 +163,7 @@ function RoomPage() {
                 </Box>
                 <RoomChat messages={messages} sendMessage={sendMessage} />
             </Drawer>
-            <CallControlsBar setChatOpen={setChatOpen} />
+            <CallControlsBar setChatOpen={setChatOpen} muteButtonRef={muteButtonRef} vidButtonRef={vidButtonRef} />
         </>
     );
 }

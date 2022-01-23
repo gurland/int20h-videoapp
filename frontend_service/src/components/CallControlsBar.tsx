@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React, { useState } from 'react';
 import MicIcon from '@mui/icons-material/Mic';
 import MicOffIcon from '@mui/icons-material/MicOff';
@@ -18,14 +20,25 @@ interface DeviceControlIconProps {
     offIcon: React.ReactElement;
     isOff: boolean;
     setIsOff: React.Dispatch<React.SetStateAction<boolean>>;
+    ref?: React.Ref<HTMLButtonElement>;
+    onClick?: () => void;
 }
 
 const toggleControl = (dispatchFunc: React.Dispatch<React.SetStateAction<boolean>>) => () =>
     dispatchFunc((prevState) => !prevState);
 
-const DeviceControlIcon = ({ isOff, setIsOff, onIcon, offIcon }: DeviceControlIconProps) => {
+const DeviceControlIcon = ({ onClick, isOff, setIsOff, onIcon, offIcon, ref }: DeviceControlIconProps) => {
     return (
-        <IconButton size="large" onClick={toggleControl(setIsOff)}>
+        <IconButton
+            size="large"
+            onClick={() => {
+                toggleControl(setIsOff);
+                if (onClick) {
+                    onClick();
+                }
+            }}
+            ref={ref}
+        >
             {isOff ? offIcon : onIcon}
         </IconButton>
     );
@@ -56,9 +69,11 @@ const useStyles = makeStyles()((theme) => ({
 
 interface CallControlsBarProps {
     setChatOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    muteButtonRef: React.Ref<HTMLButtonElement>;
+    vidButtonRef: React.Ref<HTMLButtonElement>;
 }
 
-function CallControlsBar({ setChatOpen }: CallControlsBarProps) {
+function CallControlsBar({ setChatOpen, vidButtonRef, muteButtonRef }: CallControlsBarProps) {
     const [micOff, setMicOff] = useState(false);
     const [soundOff, setSoundOff] = useState(false);
     const [videoOff, setVideoOff] = useState(false);
@@ -73,7 +88,15 @@ function CallControlsBar({ setChatOpen }: CallControlsBarProps) {
     return (
         <CustomCard className={classes.card}>
             <Box className={classes.controlsWrapper}>
-                <DeviceControlIcon isOff={micOff} setIsOff={setMicOff} offIcon={<MicOffIcon />} onIcon={<MicIcon />} />
+                <DeviceControlIcon
+                    // @ts-ignore
+                    onClick={() => window.toggleMute()}
+                    ref={muteButtonRef}
+                    isOff={micOff}
+                    setIsOff={setMicOff}
+                    offIcon={<MicOffIcon />}
+                    onIcon={<MicIcon />}
+                />
                 <DeviceControlIcon
                     isOff={soundOff}
                     setIsOff={setSoundOff}
@@ -81,6 +104,9 @@ function CallControlsBar({ setChatOpen }: CallControlsBarProps) {
                     onIcon={<VolumeUpIcon />}
                 />
                 <DeviceControlIcon
+                    // @ts-ignore
+                    onClick={() => window.toggleVid()}
+                    ref={vidButtonRef}
                     isOff={videoOff}
                     setIsOff={setVideoOff}
                     offIcon={<VideocamOffIcon />}
