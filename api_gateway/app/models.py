@@ -1,5 +1,8 @@
 from app.settings import *
 
+from datetime import datetime
+import uuid
+
 from peewee import PostgresqlDatabase, IntegerField, CharField, DateField, BooleanField, TextField, ForeignKeyField, UUIDField, DecimalField, TimeField, DateTimeField
 from playhouse.signals import Model, post_save
 from passlib.hash import bcrypt
@@ -56,9 +59,37 @@ class User(BaseModel):
         return create_access_token(token_payload)
 
 
+class Room(BaseModel):
+    uuid = UUIDField(primary_key=True, default=uuid.uuid4)
+    created_at = DateTimeField(default=datetime.utcnow)
+
+    name = CharField()
+    description = CharField(null=True)
+    public = BooleanField(default=True)
+
+    creator = ForeignKeyField(User, backref="rooms")
+
+    def to_dict(self):
+        participants = RoomParticipant.select().where(RoomParticipant.room == self)
+
+        return {
+            "uuid": self.uuid,
+            "name": self.name,
+            "description": self.name,
+            "participants": [participant.to_dict() for participant in participants]
+        }
+
+
+class RoomParticipant(BaseModel):
+    room = ForeignKeyField(Room, backref="room_participants")
+    participant = ForeignKeyField(User, backref="room_participants")
+
+
 database.create_tables([
     User,
-    File
+    File,
+    Room,
+    RoomParticipant
 ], safe=True)
 
 test_users = [
