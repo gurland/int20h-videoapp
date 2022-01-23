@@ -9,6 +9,7 @@ from app.views import blp as heartbeats_blp
 from app.views.auth.tokens import blp as jwt_blp
 from app.views.users.users import blp as users_blp
 from app.views.files import blp as files_blp
+from app.views.rooms.rooms import blp as rooms_blp
 
 
 def register_api_blueprints(api):
@@ -16,6 +17,7 @@ def register_api_blueprints(api):
     api.register_blueprint(jwt_blp)
     api.register_blueprint(users_blp)
     api.register_blueprint(files_blp)
+    api.register_blueprint(rooms_blp)
 
 
 def create_app():
