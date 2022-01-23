@@ -165,9 +165,10 @@ class RoomByUUIDParticipantsById(MethodView):
 
         try:
             requested_room = Room.get(uuid=room_id)
-            print("=======================")
-            print(participant_to_remove.id)
-            print(current_user.id)
+            import logging
+            logging.error("=======================")
+            logging.error(participant_to_remove.id)
+            logging.error(current_user.id)
 
             if current_user != requested_room.creator or current_user != participant_to_remove:
                 return jsonify({"message": "You don't have rights to kick other participants"}), 400
