@@ -1,7 +1,9 @@
 import React from 'react';
 import { Room } from '../types/Room';
-import { Grid } from '@mui/material';
+import { Box, Button, Container, Grid, Typography } from '@mui/material';
 import RoomCard from '../components/RoomCard';
+import { useNavigate } from 'react-router-dom';
+import { Routes } from '../constants/routes';
 
 const rooms: Room[] = [
     {
@@ -183,6 +185,23 @@ const rooms: Room[] = [
 ];
 
 function Homepage() {
+    const token = localStorage.getItem('accessToken');
+    const navigate = useNavigate();
+
+    if (!token) {
+        return (
+            <Container sx={{ height: '80%' }}>
+                <Box display="flex" justifyContent="center" alignItems="center" flexDirection="column" height="100%">
+                    <Typography variant="h3" mb={4}>
+                        Please authorize to see available rooms
+                    </Typography>
+                    <Button variant="outlined" size="large" onClick={() => navigate(Routes.Auth)}>
+                        Go to Auth Page
+                    </Button>
+                </Box>
+            </Container>
+        );
+    }
     return (
         <Grid container spacing={3}>
             {rooms.map((item) => (

@@ -1,8 +1,14 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Button, Container, Grid, TextField } from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { login as loginFunc, signUp } from '../api/actions';
+import jwt_decode from 'jwt-decode';
+import { Actions, store } from '../utils/store';
+import { User } from '../types/User';
+import { Routes } from '../constants/routes';
+import { useNavigate } from 'react-router-dom';
 
 type Inputs = { login: string; password: string };
 
@@ -19,10 +25,29 @@ function AuthPage() {
         handleSubmit,
     } = useForm<Inputs>({ defaultValues: { login: '', password: '' }, resolver: yupResolver(schema) });
     const { password, login } = getValues();
+    const { dispatch } = useContext(store);
+    const navigate = useNavigate();
 
-    const handleLogin = handleSubmit(() => null);
+    const handleLogin = handleSubmit(async () => {
+        const {
+            data: { token },
+        } = await loginFunc(login, password);
+        localStorage.setItem('accessToken', token);
+        const userData: User = jwt_decode(token);
+        dispatch({ type: Actions.SetUser, payload: userData });
+        navigate(Routes.Homepage);
+    });
 
-    const handleSignUp = handleSubmit(() => null);
+    const handleSignUp = handleSubmit(async () => {
+        await signUp(login, password);
+        const {
+            data: { token },
+        } = await loginFunc(login, password);
+        localStorage.setItem('accessToken', token);
+        const userData: User = jwt_decode(token);
+        dispatch({ type: Actions.SetUser, payload: userData });
+        navigate(Routes.Homepage);
+    });
 
     return (
         <Container maxWidth="xs" disableGutters sx={{ marginTop: 8 }}>

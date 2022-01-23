@@ -1,1 +1,3 @@
-export enum Actions {}
+export enum Actions {
+    SetUser = 'SET_USER',
+}
