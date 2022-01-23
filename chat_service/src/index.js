@@ -80,10 +80,10 @@ io.use(function (socket, next) {
   let connectedUsers = Array.from(connectedSocketIDs)
     .map((otherSocketId) => io.sockets.sockets.get(otherSocketId))
     .filter((otherSocket) => otherSocket.roomId === socket.roomId)
-    .map((otherSocket) => otherSocket.userId);
+    .map((otherSocket) => [otherSocket.userId, otherSocket.id]);
 
   socket.emit("join", connectedUsers);
-  io.to(chatRoom).emit("join", [socket.userId]);
+  io.to(chatRoom).emit("join", [[socket.userId, socket.id]]);
 
    /**
    * remove the disconnected peer connection from all other connected clients
