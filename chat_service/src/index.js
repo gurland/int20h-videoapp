@@ -26,7 +26,7 @@ io.use(function(socket, next){
     jwt.verify(socket.handshake.query.token, JWTSECRET, function(err, decoded) {
       if (err) return next(new Error('Authentication error'));
 
-      socket.sessionId = socket.handshake.query.sessionId;
+      socket.roomId = socket.handshake.query.roomId;
       socket.decoded = decoded;
       socket.userId = socket.decoded.sub.id;
       next();
@@ -38,14 +38,14 @@ io.use(function(socket, next){
 })
 .on('connection', async function(socket) {
   // Connection now authenticated to receive further events
-  const chatRoom = "chat:" + socket.sessionId;
+  const chatRoom = "chat:" + socket.roomId;
 
   socket.join(chatRoom);
   const connectedSocketIDs = await io.in(chatRoom).allSockets();
   console.log(Array.from(connectedSocketIDs));
   let connectedUsers = Array.from(connectedSocketIDs)
     .map(otherSocketId => io.sockets.sockets.get(otherSocketId))
-    .filter(otherSocket => otherSocket.sessionId === socket.sessionId)
+    .filter(otherSocket => otherSocket.roomId === socket.roomId)
     .map(otherSocket => otherSocket.userId)
 
   socket.emit("join", connectedUsers);
@@ -56,14 +56,14 @@ io.use(function(socket, next){
       socket.leave(chatRoom);
   });
 
-  Chat.findOneOrCreate({sessionId: socket.sessionId}, (err, chat) =>
+  Chat.findOneOrCreate({roomId: socket.roomId}, (err, chat) =>
     {
       socket.emit('message-broadcast', chat.messages);
     }
   );
 
   socket.on('message', (msg) => {
-    Chat.findOneOrCreate({sessionId: socket.sessionId}, (err, chat) => {
+    Chat.findOneOrCreate({roomId: socket.roomId}, (err, chat) => {
       msg.senderId = socket.userId;
       chat.messages.push(msg);
       chat.save();

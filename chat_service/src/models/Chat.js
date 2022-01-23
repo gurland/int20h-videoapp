@@ -22,7 +22,7 @@ const messageSchema = new Schema(
 
 const chatSchema = new Schema(
 	{
-		sessionId:
+		roomId:
 		{
 			type: Number
 		},
