@@ -37,7 +37,6 @@ function RoomPage() {
     const peers = useRef({});
     const muteButtonRef = useRef<HTMLButtonElement | null>(null);
     const vidButtonRef = useRef<HTMLButtonElement | null>(null);
-    console.log(peers.current);
 
     const joinRequest = async (roomId: string) => {
         try {
