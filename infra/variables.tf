@@ -1,7 +1,3 @@
-variable "domain" {
-  default = "videoapp.link"
-}
-
 variable "files_bucket" {
   default = "videoapp-files"
 }

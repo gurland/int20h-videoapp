@@ -1,3 +1,3 @@
-output "api_ecr_repository_url" {
-  value = aws_ecr_repository.api_gateway.repository_url
+output "s3_bucket_domain" {
+  value = aws_s3_bucket.file_bucket.bucket_domain_name
 }
