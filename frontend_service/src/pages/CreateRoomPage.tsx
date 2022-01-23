@@ -1,14 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
-import { Button, Container, FormControlLabel, Grid, Switch, TextField } from '@mui/material';
+import { Container, FormControlLabel, Grid, Switch, TextField } from '@mui/material';
 import * as yup from 'yup';
+import { createRoom } from '../api/actions';
+import { useNavigate } from 'react-router-dom';
+import { Routes } from '../constants/routes';
+import { LoadingButton } from '@mui/lab';
 
 type Inputs = { title: string; description: string; isPrivate: boolean };
 
 const schema = yup.object({
     title: yup.string().required('Title is required'),
-    password: yup.string().required('Description is required'),
+    description: yup.string().required('Description is required'),
 });
 
 function CreateRoomPage() {
@@ -21,10 +25,16 @@ function CreateRoomPage() {
         defaultValues: { title: '', description: '', isPrivate: false },
         resolver: yupResolver(schema),
     });
-    const { title, description, isPrivate } = getValues();
+    const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
 
-    const handleCreate = handleSubmit(() => null);
-    console.log({ title, description, isPrivate });
+    const handleCreate = handleSubmit(async () => {
+        setLoading(true);
+        const { title, description, isPrivate } = getValues();
+        await createRoom({ name: title, description, public: !isPrivate });
+        navigate(Routes.Homepage);
+        setLoading(false);
+    });
 
     return (
         <Container maxWidth="xs" disableGutters sx={{ marginTop: 8 }}>
@@ -69,9 +79,15 @@ function CreateRoomPage() {
                     />
                 </Grid>
                 <Grid item xs={12}>
-                    <Button variant="contained" disableElevation fullWidth onClick={handleCreate}>
+                    <LoadingButton
+                        loading={loading}
+                        variant="contained"
+                        disableElevation
+                        fullWidth
+                        onClick={handleCreate}
+                    >
                         Create
-                    </Button>
+                    </LoadingButton>
                 </Grid>
             </Grid>
         </Container>
