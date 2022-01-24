@@ -68,6 +68,7 @@ services:
       - mongo
 
     environment:
+      DEBUG: "*"
       JWT_SECRET: secret
       MONGO_URI: "mongodb://root:supersecretpass@mongo:27017/chats?authSource=chats"
       API_PORT: 5000
