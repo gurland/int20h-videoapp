@@ -1,7 +1,7 @@
 const http = require("http");
 const Chat = require("./models/Chat");
 const jwt = require("jsonwebtoken");
-const { JWTSECRET, API_HOST } = require("./config.js");
+const { JWTSECRET, API_HOST, API_PORT } = require("./config.js");
 
 require("./dbconnection");
 
@@ -9,8 +9,8 @@ peers = {};
 
 const removeParticipantFromRoom = (roomId, participantId) => {
     const options = {
-    hostname: 'API_HOST',
-    port: 443,
+    hostname: API_HOST,
+    port: API_PORT,
     path: "/api/rooms/" + roomId + "/participants/" + participantId,
     method: 'DELETE',
     headers: {
