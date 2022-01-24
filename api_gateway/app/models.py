@@ -96,23 +96,26 @@ class RoomParticipant(BaseModel):
         return False
 
 
-database.create_tables([
-    User,
-    File,
-    Room,
-    RoomParticipant
-], safe=True)
+# Init DB
 
-test_users = [
-    dict(
-        login="admin",
-        password_hash=bcrypt.hash("qweqweqwe"),
-        profile_name='admin'
-    ),
-]
+with database:
+    database.create_tables([
+        User,
+        File,
+        Room,
+        RoomParticipant
+    ], safe=True)
 
-for user in test_users:
-    try:
-        User.get_or_create(**user)
-    except:
-        pass
+    test_users = [
+        dict(
+            login="admin",
+            password_hash=bcrypt.hash("qweqweqwe"),
+            profile_name='admin'
+        ),
+    ]
+
+    for user in test_users:
+        try:
+            User.get_or_create(**user)
+        except:
+            pass

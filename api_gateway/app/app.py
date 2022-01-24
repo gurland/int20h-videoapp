@@ -4,6 +4,7 @@ from flask import Flask
 from flask_smorest import Api
 from flask_jwt_extended import JWTManager
 
+from app.models import database
 from app.settings import JWT_SECRET
 from app.views import blp as heartbeats_blp
 from app.views.auth.tokens import blp as jwt_blp
@@ -30,6 +31,16 @@ def create_app():
     app.config["JWT_SECRET_KEY"] = JWT_SECRET
     app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(days=30)
     app.config["JWT_REFRESH_TOKEN_EXPIRES"] = timedelta(days=30)
+
+    @app.before_request
+    def before_request():
+        database.connect()
+
+    @app.after_request
+    def after_request(response):
+        database.close()
+        return response
+
     JWTManager(app)
     api = Api(app)
     register_api_blueprints(api)

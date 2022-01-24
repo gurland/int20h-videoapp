@@ -1,11 +1,37 @@
 const http = require("http");
 const Chat = require("./models/Chat");
 const jwt = require("jsonwebtoken");
-const { JWTSECRET } = require("./config.js");
+const {JWTSECRET, API_HOST, API_PORT} = require("./config.js");
 
 require("./dbconnection");
 
 peers = {};
+
+const removeParticipantFromRoom = (roomId, participantId) => {
+  const options = {
+    hostname: API_HOST,
+    port: API_PORT,
+    path: "/api/rooms/" + roomId + "/participants/" + participantId,
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + "qwe"
+    }
+  }
+
+  console.log("DELETE PARTICIPANT OPTIONS")
+  console.log(options)
+
+  let req = http.request(options, res => {
+    console.log("Delete participant " + participantId + " from room: " + roomId + ". Status code: " + res.statusCode)
+  })
+
+  req.on('error', error => {
+    console.error(error)
+  })
+
+
+}
 
 const server = http.createServer();
 const io = require("socket.io")(server, {
@@ -44,15 +70,31 @@ io.use(function (socket, next) {
 }).on("connection", async function (socket) {
   // Connection now authenticated to receive further events
   const chatRoom = "chat:" + socket.roomId;
+  io.to(chatRoom).emit("join", [[socket.userId, socket.id]]);
 
   socket.join(chatRoom);
+
+  const connectedSocketIDs = await io.in(chatRoom).allSockets();
+  console.log(Array.from(connectedSocketIDs));
+  let connectedUsers = Array.from(connectedSocketIDs)
+    .map((otherSocketId) => io.sockets.sockets.get(otherSocketId))
+    .filter((otherSocket) => otherSocket.roomId === socket.roomId)
+    .map((otherSocket) => [otherSocket.userId, otherSocket.id]);
+
+  socket.emit("join", connectedUsers);
+
 
   // Initiate the connection process as soon as the client connects
 
   peers[socket.id] = socket;
 
   // Asking all other clients to setup the peer connection receiver
-  socket.to(chatRoom).emit("initReceive", socket.id);
+  // socket.to(chatRoom).emit("initReceive", socket.id);
+  for (let id in peers) {
+    if (id === socket.id) continue;
+    console.log("sending init receive to " + socket.id);
+    peers[id].emit("initReceive", socket.id);
+  }
 
   /**
    * relay a peerconnection signal to a specific socket
@@ -75,16 +117,6 @@ io.use(function (socket, next) {
     peers[init_socket_id].emit("initSend", socket.id);
   });
 
-  const connectedSocketIDs = await io.in(chatRoom).allSockets();
-  console.log(Array.from(connectedSocketIDs));
-  let connectedUsers = Array.from(connectedSocketIDs)
-    .map((otherSocketId) => io.sockets.sockets.get(otherSocketId))
-    .filter((otherSocket) => otherSocket.roomId === socket.roomId)
-    .map((otherSocket) => [otherSocket.userId, otherSocket.id]);
-
-  socket.emit("join", connectedUsers);
-  io.to(chatRoom).emit("join", [[socket.userId, socket.id]]);
-
   /**
    * remove the disconnected peer connection from all other connected clients
    */
@@ -95,9 +127,13 @@ io.use(function (socket, next) {
 
     socket.to(chatRoom).emit("leave", [socket.userId]);
     socket.leave(chatRoom);
+
+    console.log("Trying to kick participant from " + socket.roomId)
+
+    removeParticipantFromRoom(socket.roomId, socket.userId)
   });
 
-  Chat.findOneOrCreate({ roomId: socket.roomId }, (err, chat) => {
+  Chat.findOneOrCreate({roomId: socket.roomId}, (err, chat) => {
     console.log("==============");
     console.log(err);
     console.log(chat);
@@ -105,7 +141,7 @@ io.use(function (socket, next) {
   });
 
   socket.on("message", (msg) => {
-    Chat.findOneOrCreate({ roomId: socket.roomId }, async (err, chat) => {
+    Chat.findOneOrCreate({roomId: socket.roomId}, async (err, chat) => {
       msg.senderId = socket.userId;
       console.log(socket.decoded);
       msg.senderName = msg.senderName || socket.decoded.sub.profile_name;

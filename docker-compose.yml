@@ -4,15 +4,20 @@ services:
     build: ./nginx_service/
     ports:
       - "80:80"
+      - "443:443"
     depends_on:
       - frontend
       - api
+      - chat
 
-  janus:
-    build: ./janus_service
-    ports:
-    - 8088:8088
-    - 8188:8188
+    volumes:
+    - /etc/letsencrypt/archive/int20h-videoapp.fun/:/etc/nginx/certs/
+
+#  janus:
+#    build: ./janus_service
+#    ports:
+#    - 8088:8088
+#    - 8188:8188
 
   api:
     build: ./api_gateway
@@ -20,6 +25,8 @@ services:
       - "5000:5000"
     volumes:
       - ./api_gateway/app:/app/
+    depends_on:
+      - db
     env_file:
       - .env
 
@@ -61,5 +68,8 @@ services:
       - mongo
 
     environment:
+      DEBUG: "*"
       JWT_SECRET: secret
       MONGO_URI: "mongodb://root:supersecretpass@mongo:27017/chats?authSource=chats"
+      API_PORT: 5000
+      API_HOST: api
