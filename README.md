@@ -14,6 +14,7 @@ Create rooms, with text, video and audio chats.
 - Kick users as creator
 - Text chat
 - Profile avatars & room descriptions
+- Copy private room URL just from your adress bar!
 
 ## Technology stack
 - Python + Flask + Smorest + Peewee
