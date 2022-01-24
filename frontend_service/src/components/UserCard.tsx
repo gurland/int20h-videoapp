@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import { Avatar, Box, IconButton, Menu, MenuItem, Typography } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import CustomCard from './CustomCard';
@@ -32,11 +32,16 @@ function UserCard({ userItem, getRoomInfo, room, videoRefs }: UserCardProps) {
     const {
         state: { user },
     } = useContext(store);
+    const videoRef = useRef<HTMLVideoElement | null>(null);
 
     const handleCloseMenu = () => setAnchorEl(null);
     const handleOpenMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
     };
+
+    useEffect(() => {
+        if (videoRef.current) videoRef.current.muted = false;
+    }, []);
 
     const handleKickUser = () => {
         if (roomId && id) {
@@ -60,6 +65,7 @@ function UserCard({ userItem, getRoomInfo, room, videoRefs }: UserCardProps) {
                         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                         // @ts-ignore
                         videoRefs[id] = v;
+                        videoRef.current = v;
                     }}
                 >
                     <source src="https://shattereddisk.github.io/rickroll/rickroll.mp4" type="video/mp4" />

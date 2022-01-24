@@ -166,6 +166,7 @@ function RoomPage() {
             newVid.id = socket_id;
             newVid.playsInline = false;
             newVid.autoplay = true;
+            newVid.muted = false;
         });
     }
 
