@@ -135,6 +135,8 @@ io.use(function (socket, next) {
     socket.to(chatRoom).emit("leave", [socket.userId]);
     socket.leave(chatRoom);
 
+    console.log("Trying to kick participant from " + socket.roomId)
+
     removeParticipantFromRoom(socket.roomId, socket.userId)
   });
 
