@@ -164,7 +164,7 @@ class RoomByUUIDParticipants(MethodView):
                 return jsonify({"message": "You have joined the room"}), 200
 
 
-@blp.route('/<string:room_id>/participants/<int:participant_id>')
+@blp.route('/<room_id>/participants/<int:participant_id>')
 class RoomByUUIDParticipantsById(MethodView):
     @blp.response(200)
     @jwt_required()
