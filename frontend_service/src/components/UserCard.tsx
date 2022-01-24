@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import { Avatar, Box, IconButton, Menu, MenuItem, Typography } from '@mui/material';
 import MicOffIcon from '@mui/icons-material/MicOff';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
@@ -21,10 +21,10 @@ interface UserCardProps {
     userItem: User;
     getRoomInfo: (roomId: string) => void;
     room: GetRoomResponse | null;
-    localVideoRef: React.Ref<HTMLVideoElement>;
+    videoRefs: Record<number, React.Ref<HTMLVideoElement>>;
 }
 
-function UserCard({ userItem, getRoomInfo, room, localVideoRef }: UserCardProps) {
+function UserCard({ userItem, getRoomInfo, room, videoRefs }: UserCardProps) {
     const { classes } = useStyles();
     const { id, profileName, profilePicture } = userItem;
     const { roomId } = useParams();
@@ -56,7 +56,11 @@ function UserCard({ userItem, getRoomInfo, room, localVideoRef }: UserCardProps)
                     autoPlay
                     muted
                     controls
-                    ref={user?.id === id ? localVideoRef : undefined}
+                    ref={(v) => {
+                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                        // @ts-ignore
+                        videoRefs[id] = v;
+                    }}
                 >
                     <source src="https://shattereddisk.github.io/rickroll/rickroll.mp4" type="video/mp4" />
                 </video>
