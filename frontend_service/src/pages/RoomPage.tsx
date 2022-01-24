@@ -223,9 +223,11 @@ function RoomPage() {
                     socketRef.current?.on('removePeer', (socket_id) => {
                         console.log('removing peer ' + socket_id);
                         removePeer(socket_id);
+                        getRoomInfo(roomId);
                     });
 
                     socketRef.current?.on('disconnect', () => {
+                        getRoomInfo(roomId);
                         console.log('GOT DISCONNECTED');
                         for (const socket_id in peers) {
                             removePeer(socket_id);
