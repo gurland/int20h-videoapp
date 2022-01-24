@@ -8,6 +8,7 @@ require("./dbconnection");
 peers = {};
 
 const removeParticipantFromRoom = (roomId, participantId) => {
+  try {
   const options = {
     hostname: API_HOST,
     port: API_PORT,
@@ -22,6 +23,11 @@ const removeParticipantFromRoom = (roomId, participantId) => {
         JWTSECRET
       )
     }
+  }
+  } catch (e) {
+    console.log(e)
+    console.log(e)
+    console.log(e)
   }
 
   console.log("DELETE PARTICIPANT OPTIONS")
