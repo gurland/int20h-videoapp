@@ -52,7 +52,7 @@ class Rooms(MethodView):
                 return jsonify({"message": "Malformed request!"}), 400
 
 
-@blp.route('/<string:room_id>')
+@blp.route('/<room_id>')
 class RoomByUUID(MethodView):
 
     @blp.response(200)
