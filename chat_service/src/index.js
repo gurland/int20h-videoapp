@@ -7,31 +7,29 @@ require("./dbconnection");
 
 peers = {};
 
-const removeParticipantFromRoom = (roomId, participantId) => {
-  const options = {
-    hostname: API_HOST,
-    port: API_PORT,
-    path: "/api/rooms/" + roomId + "/participants/" + participantId,
-    method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + "qwe"
-    }
-  }
-
-  console.log("DELETE PARTICIPANT OPTIONS")
-  console.log(options)
-
-  let req = http.request(options, res => {
-    console.log("Delete participant " + participantId + " from room: " + roomId + ". Status code: " + res.statusCode)
-  })
-
-  req.on('error', error => {
-    console.error(error)
-  })
-
-
-}
+// const removeParticipantFromRoom = (roomId, participantId) => {
+//   const options = {
+//     hostname: API_HOST,
+//     port: API_PORT,
+//     path: "/api/rooms/" + roomId + "/participants/" + participantId,
+//     method: 'DELETE',
+//     headers: {
+//       'Content-Type': 'application/json',
+//       'Authorization': 'Bearer ' + "qwe"
+//     }
+//   }
+//
+//   console.log("DELETE PARTICIPANT OPTIONS")
+//   console.log(options)
+//
+//   let req = http.request(options, res => {
+//     console.log("Delete participant " + participantId + " from room: " + roomId + ". Status code: " + res.statusCode)
+//   })
+//
+//   req.on('error', error => {
+//     console.error(error)
+//   })
+// }
 
 const server = http.createServer();
 const io = require("socket.io")(server, {
@@ -130,7 +128,7 @@ io.use(function (socket, next) {
 
     console.log("Trying to kick participant from " + socket.roomId)
 
-    removeParticipantFromRoom(socket.roomId, socket.userId)
+    // removeParticipantFromRoom(socket.roomId, socket.userId)
   });
 
   Chat.findOneOrCreate({roomId: socket.roomId}, (err, chat) => {
