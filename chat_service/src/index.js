@@ -53,8 +53,9 @@ io.use(function (socket, next) {
     .map((otherSocket) => [otherSocket.userId, otherSocket.id]);
 
   socket.emit("join", connectedUsers);
-  socket.join(chatRoom);
   io.to(chatRoom).emit("join", [[socket.userId, socket.id]]);
+  socket.join(chatRoom);
+
 
 
   // Initiate the connection process as soon as the client connects
