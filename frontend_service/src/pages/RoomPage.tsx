@@ -1,4 +1,4 @@
-import React, { createRef, useCallback, useContext, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { Box, Drawer, Grid, IconButton } from '@mui/material';
 import CallControlsBar from '../components/CallControlsBar';
 import { makeStyles } from 'tss-react/mui';
@@ -10,7 +10,6 @@ import { useParams } from 'react-router-dom';
 import { deleteParticipant, getRoom, joinToRoom } from '../api/actions';
 import { store } from '../utils/store';
 import { GetRoomResponse } from '../api/types/GetRoomResponse';
-import { initPeerToPeer } from '../utils/p2pHelpers';
 import { io, Socket } from 'socket.io-client';
 import { ChatMessage } from '../types/ChatMessage';
 import SimplePeer from 'simple-peer';
@@ -60,6 +59,22 @@ const videoRefs: Record<number, React.Ref<HTMLVideoElement>> = {};
 // @ts-ignore
 let localStream: MediaStream = null;
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+window.toggleVid = function toggleVid() {
+    for (const index in localStream.getVideoTracks()) {
+        localStream.getVideoTracks()[index].enabled = !localStream.getVideoTracks()[index].enabled;
+    }
+};
+
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+window.toggleMute = function toggleMute() {
+    for (const index in localStream.getAudioTracks()) {
+        localStream.getAudioTracks()[index].enabled = !localStream.getAudioTracks()[index].enabled;
+    }
+};
+
 function RoomPage() {
     const { classes } = useStyles();
     const [chatOpen, setChatOpen] = useState(false);
@@ -72,10 +87,6 @@ function RoomPage() {
     const users = room?.participants || [];
     const socketRef = useRef<Socket | null>(null);
     const [messages, setMessages] = useState<ChatMessage[]>([]);
-    const muteButtonRef = useRef<HTMLButtonElement | null>(null);
-    const vidButtonRef = useRef<HTMLButtonElement | null>(null);
-    // console.log('mapped', mapped);
-    // console.log('peers', peers);
 
     const joinRequest = async (roomId: string) => {
         try {
@@ -126,10 +137,6 @@ function RoomPage() {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     function addPeer(socket_id, am_initiator) {
-        console.log('peers', peers);
-        console.log('mapped', mapped);
-        console.log('socket_id', socket_id);
-        console.log(videoRefs);
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         peers[socket_id] = new SimplePeer({
@@ -201,8 +208,6 @@ function RoomPage() {
                     });
 
                     socketRef.current?.on('initReceive', (socket_id) => {
-                        console.log('initReceive peers', peers);
-
                         console.log('INIT RECEIVE ' + socket_id);
                         addPeer(socket_id, false);
 
@@ -210,8 +215,6 @@ function RoomPage() {
                     });
 
                     socketRef.current?.on('initSend', (socket_id) => {
-                        console.log('initSend peers', peers);
-
                         console.log('INIT SEND ' + socket_id);
                         addPeer(socket_id, true);
                     });
@@ -320,7 +323,7 @@ function RoomPage() {
                 </Box>
                 <RoomChat messages={messages} sendMessage={sendMessage} />
             </Drawer>
-            <CallControlsBar setChatOpen={setChatOpen} muteButtonRef={muteButtonRef} vidButtonRef={vidButtonRef} />
+            <CallControlsBar setChatOpen={setChatOpen} />
         </>
     );
 }

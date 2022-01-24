@@ -3,8 +3,6 @@
 import React, { useState } from 'react';
 import MicIcon from '@mui/icons-material/Mic';
 import MicOffIcon from '@mui/icons-material/MicOff';
-import VolumeUpIcon from '@mui/icons-material/VolumeUp';
-import VolumeOffIcon from '@mui/icons-material/VolumeOff';
 import VideocamIcon from '@mui/icons-material/Videocam';
 import VideocamOffIcon from '@mui/icons-material/VideocamOff';
 import CallEndIcon from '@mui/icons-material/CallEnd';
@@ -20,24 +18,22 @@ interface DeviceControlIconProps {
     offIcon: React.ReactElement;
     isOff: boolean;
     setIsOff: React.Dispatch<React.SetStateAction<boolean>>;
-    ref?: React.Ref<HTMLButtonElement>;
     onClick?: () => void;
 }
 
 const toggleControl = (dispatchFunc: React.Dispatch<React.SetStateAction<boolean>>) => () =>
     dispatchFunc((prevState) => !prevState);
 
-const DeviceControlIcon = ({ onClick, isOff, setIsOff, onIcon, offIcon, ref }: DeviceControlIconProps) => {
+const DeviceControlIcon = ({ onClick, isOff, setIsOff, onIcon, offIcon }: DeviceControlIconProps) => {
     return (
         <IconButton
             size="large"
             onClick={() => {
-                toggleControl(setIsOff);
+                toggleControl(setIsOff)();
                 if (onClick) {
                     onClick();
                 }
             }}
-            ref={ref}
         >
             {isOff ? offIcon : onIcon}
         </IconButton>
@@ -69,11 +65,9 @@ const useStyles = makeStyles()((theme) => ({
 
 interface CallControlsBarProps {
     setChatOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    muteButtonRef: React.Ref<HTMLButtonElement>;
-    vidButtonRef: React.Ref<HTMLButtonElement>;
 }
 
-function CallControlsBar({ setChatOpen, vidButtonRef, muteButtonRef }: CallControlsBarProps) {
+function CallControlsBar({ setChatOpen }: CallControlsBarProps) {
     const [micOff, setMicOff] = useState(false);
     const [soundOff, setSoundOff] = useState(false);
     const [videoOff, setVideoOff] = useState(false);
@@ -91,22 +85,14 @@ function CallControlsBar({ setChatOpen, vidButtonRef, muteButtonRef }: CallContr
                 <DeviceControlIcon
                     // @ts-ignore
                     onClick={() => window.toggleMute()}
-                    ref={muteButtonRef}
                     isOff={micOff}
                     setIsOff={setMicOff}
                     offIcon={<MicOffIcon />}
                     onIcon={<MicIcon />}
                 />
                 <DeviceControlIcon
-                    isOff={soundOff}
-                    setIsOff={setSoundOff}
-                    offIcon={<VolumeOffIcon />}
-                    onIcon={<VolumeUpIcon />}
-                />
-                <DeviceControlIcon
                     // @ts-ignore
                     onClick={() => window.toggleVid()}
-                    ref={vidButtonRef}
                     isOff={videoOff}
                     setIsOff={setVideoOff}
                     offIcon={<VideocamOffIcon />}
