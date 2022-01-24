@@ -28,9 +28,16 @@ const removeParticipantFromRoom = (roomId, participantId) => {
   console.log("DELETE PARTICIPANT OPTIONS")
   console.log(options)
 
-  http.request(options, res => {
+  let req = http.request(options, res => {
     console.log("Delete participant " + participantId + " from room: " + roomId + ". Status code: " + res.statusCode)
+
   })
+
+  req.on('error', error => {
+    console.error(error)
+  })
+
+
 }
 
 const server = http.createServer();
