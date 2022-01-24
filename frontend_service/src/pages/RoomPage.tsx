@@ -244,13 +244,12 @@ function RoomPage() {
         }
 
         return () => {
-            socketRef.current?.disconnect();
-
             if (roomId && user?.id) {
                 (async () => {
                     await deleteParticipant(roomId, user.id);
                 })();
             }
+            socketRef.current?.disconnect();
         };
     }, [roomId, user?.id]);
 
