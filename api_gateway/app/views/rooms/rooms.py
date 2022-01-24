@@ -173,7 +173,7 @@ class RoomByUUIDParticipantsById(MethodView):
             identity = get_jwt_identity()
 
             try:
-                current_user = User.get(login=identity.get("login"))
+                current_user = User.get(id=identity.get("id"))
                 participant_to_remove = User.get(id=participant_id)
             except User.DoesNotExist:
                 return jsonify({"message": "User does not exist"}), 400
@@ -187,7 +187,7 @@ class RoomByUUIDParticipantsById(MethodView):
 
                 if current_user.id == requested_room.creator.id:
                     is_kicked = RoomParticipant.kick_participant(requested_room, participant_id)
-                elif current_user.id != participant_to_remove.id:
+                elif current_user.id == participant_to_remove.id:
                     is_kicked = RoomParticipant.kick_participant(requested_room, participant_id)
                 else:
                     return jsonify({"message": "You don't have rights to kick other participants"}), 400

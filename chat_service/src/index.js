@@ -1,11 +1,33 @@
 const http = require("http");
 const Chat = require("./models/Chat");
 const jwt = require("jsonwebtoken");
-const { JWTSECRET } = require("./config.js");
+const { JWTSECRET, API_HOST } = require("./config.js");
 
 require("./dbconnection");
 
 peers = {};
+
+const removeParticipantFromRoom = (roomId, participantId) => {
+    const options = {
+    hostname: 'API_HOST',
+    port: 443,
+    path: "/api/rooms/" + roomId + "/participants/" + participantId,
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + jwt.sign(
+        {
+          "id": participantId
+        },
+        JWTSECRET
+      )
+    }
+  }
+
+  http.request(options, res => {
+    console.log("Delete participant " + participantId + " from room: " + roomId + ". Status code: " + res.statusCode)
+  })
+}
 
 const server = http.createServer();
 const io = require("socket.io")(server, {
@@ -102,6 +124,8 @@ io.use(function (socket, next) {
 
     socket.to(chatRoom).emit("leave", [socket.userId]);
     socket.leave(chatRoom);
+
+    removeParticipantFromRoom(socket.roomId, socket.userId)
   });
 
   Chat.findOneOrCreate({ roomId: socket.roomId }, (err, chat) => {
