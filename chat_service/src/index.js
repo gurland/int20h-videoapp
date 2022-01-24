@@ -87,12 +87,7 @@ io.use(function (socket, next) {
   peers[socket.id] = socket;
 
   // Asking all other clients to setup the peer connection receiver
-  // socket.to(chatRoom).emit("initReceive", socket.id);
-  for (let id in peers) {
-    if (id === socket.id) continue;
-    console.log("sending init receive to " + socket.id);
-    peers[id].emit("initReceive", socket.id);
-  }
+  io.to(chatRoom).emit("initReceive", socket.id)
 
   /**
    * relay a peerconnection signal to a specific socket
