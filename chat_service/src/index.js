@@ -16,12 +16,7 @@ const removeParticipantFromRoom = (roomId, participantId) => {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + jwt.sign(
-        {
-          "id": participantId
-        },
-        JWTSECRET
-      )
+      'Authorization': 'Bearer ' + "qwe"
     }
   }
   } catch (e) {
