@@ -44,8 +44,20 @@ io.use(function (socket, next) {
 }).on("connection", async function (socket) {
   // Connection now authenticated to receive further events
   const chatRoom = "chat:" + socket.roomId;
+  io.to(chatRoom).emit("join", [[socket.userId, socket.id]]);
 
   socket.join(chatRoom);
+
+  const connectedSocketIDs = await io.in(chatRoom).allSockets();
+  console.log(Array.from(connectedSocketIDs));
+  let connectedUsers = Array.from(connectedSocketIDs)
+    .map((otherSocketId) => io.sockets.sockets.get(otherSocketId))
+    .filter((otherSocket) => otherSocket.roomId === socket.roomId)
+    .map((otherSocket) => [otherSocket.userId, otherSocket.id]);
+
+  socket.emit("join", connectedUsers);
+
+
 
   // Initiate the connection process as soon as the client connects
 
@@ -79,16 +91,6 @@ io.use(function (socket, next) {
     console.log("INIT SEND by " + socket.id + " for " + init_socket_id);
     peers[init_socket_id].emit("initSend", socket.id);
   });
-
-  const connectedSocketIDs = await io.in(chatRoom).allSockets();
-  console.log(Array.from(connectedSocketIDs));
-  let connectedUsers = Array.from(connectedSocketIDs)
-    .map((otherSocketId) => io.sockets.sockets.get(otherSocketId))
-    .filter((otherSocket) => otherSocket.roomId === socket.roomId)
-    .map((otherSocket) => [otherSocket.userId, otherSocket.id]);
-
-  socket.emit("join", connectedUsers);
-  io.to(chatRoom).emit("join", [[socket.userId, socket.id]]);
 
   /**
    * remove the disconnected peer connection from all other connected clients
