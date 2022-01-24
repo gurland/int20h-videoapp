@@ -56,7 +56,7 @@ function RoomPage() {
     };
 
     useEffect(() => {
-        socketRef.current = io('http://157.90.230.141', {
+        socketRef.current = io('https://int20h-videoapp.fun', {
             path: '/ws/chat',
             query: {
                 token: localStorage.getItem('accessToken'),
