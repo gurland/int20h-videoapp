@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig } from 'axios';
 
 export const axiosClient = axios.create({
-    baseURL: 'http://157.90.230.141/api',
+    baseURL: 'https://int20h-videoapp.fun/',
     headers: { Authorization: `Bearer ${localStorage.getItem('accessToken') || ''}` },
 });
 
