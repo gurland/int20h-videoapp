@@ -1,14 +1,14 @@
 const http = require("http");
 const Chat = require("./models/Chat");
 const jwt = require("jsonwebtoken");
-const { JWTSECRET, API_HOST, API_PORT } = require("./config.js");
+const {JWTSECRET, API_HOST, API_PORT} = require("./config.js");
 
 require("./dbconnection");
 
 peers = {};
 
 const removeParticipantFromRoom = (roomId, participantId) => {
-    const options = {
+  const options = {
     hostname: API_HOST,
     port: API_PORT,
     path: "/api/rooms/" + roomId + "/participants/" + participantId,
@@ -23,6 +23,9 @@ const removeParticipantFromRoom = (roomId, participantId) => {
       )
     }
   }
+
+  console.log("DELETE PARTICIPANT OPTIONS")
+  console.log(options)
 
   http.request(options, res => {
     console.log("Delete participant " + participantId + " from room: " + roomId + ". Status code: " + res.statusCode)
@@ -80,7 +83,6 @@ io.use(function (socket, next) {
   socket.emit("join", connectedUsers);
 
 
-
   // Initiate the connection process as soon as the client connects
 
   peers[socket.id] = socket;
@@ -128,7 +130,7 @@ io.use(function (socket, next) {
     removeParticipantFromRoom(socket.roomId, socket.userId)
   });
 
-  Chat.findOneOrCreate({ roomId: socket.roomId }, (err, chat) => {
+  Chat.findOneOrCreate({roomId: socket.roomId}, (err, chat) => {
     console.log("==============");
     console.log(err);
     console.log(chat);
@@ -136,7 +138,7 @@ io.use(function (socket, next) {
   });
 
   socket.on("message", (msg) => {
-    Chat.findOneOrCreate({ roomId: socket.roomId }, async (err, chat) => {
+    Chat.findOneOrCreate({roomId: socket.roomId}, async (err, chat) => {
       msg.senderId = socket.userId;
       console.log(socket.decoded);
       msg.senderName = msg.senderName || socket.decoded.sub.profile_name;
