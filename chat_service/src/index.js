@@ -1,33 +1,35 @@
 const http = require("http");
 const Chat = require("./models/Chat");
 const jwt = require("jsonwebtoken");
-const { JWTSECRET, API_HOST } = require("./config.js");
+const {JWTSECRET, API_HOST, API_PORT} = require("./config.js");
 
 require("./dbconnection");
 
 peers = {};
 
-const removeParticipantFromRoom = (roomId, participantId) => {
-    const options = {
-    hostname: 'API_HOST',
-    port: 443,
-    path: "/api/rooms/" + roomId + "/participants/" + participantId,
-    method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + jwt.sign(
-        {
-          "id": participantId
-        },
-        JWTSECRET
-      )
-    }
-  }
-
-  http.request(options, res => {
-    console.log("Delete participant " + participantId + " from room: " + roomId + ". Status code: " + res.statusCode)
-  })
-}
+// const removeParticipantFromRoom = (roomId, participantId) => {
+//   const options = {
+//     hostname: API_HOST,
+//     port: API_PORT,
+//     path: "/api/rooms/" + roomId + "/participants/" + participantId,
+//     method: 'DELETE',
+//     headers: {
+//       'Content-Type': 'application/json',
+//       'Authorization': 'Bearer ' + "qwe"
+//     }
+//   }
+//
+//   console.log("DELETE PARTICIPANT OPTIONS")
+//   console.log(options)
+//
+//   let req = http.request(options, res => {
+//     console.log("Delete participant " + participantId + " from room: " + roomId + ". Status code: " + res.statusCode)
+//   })
+//
+//   req.on('error', error => {
+//     console.error(error)
+//   })
+// }
 
 const server = http.createServer();
 const io = require("socket.io")(server, {
@@ -80,7 +82,6 @@ io.use(function (socket, next) {
   socket.emit("join", connectedUsers);
 
 
-
   // Initiate the connection process as soon as the client connects
 
   peers[socket.id] = socket;
@@ -125,10 +126,12 @@ io.use(function (socket, next) {
     socket.to(chatRoom).emit("leave", [socket.userId]);
     socket.leave(chatRoom);
 
-    removeParticipantFromRoom(socket.roomId, socket.userId)
+    console.log("Trying to kick participant from " + socket.roomId)
+
+    // removeParticipantFromRoom(socket.roomId, socket.userId)
   });
 
-  Chat.findOneOrCreate({ roomId: socket.roomId }, (err, chat) => {
+  Chat.findOneOrCreate({roomId: socket.roomId}, (err, chat) => {
     console.log("==============");
     console.log(err);
     console.log(chat);
@@ -136,7 +139,7 @@ io.use(function (socket, next) {
   });
 
   socket.on("message", (msg) => {
-    Chat.findOneOrCreate({ roomId: socket.roomId }, async (err, chat) => {
+    Chat.findOneOrCreate({roomId: socket.roomId}, async (err, chat) => {
       msg.senderId = socket.userId;
       console.log(socket.decoded);
       msg.senderName = msg.senderName || socket.decoded.sub.profile_name;
