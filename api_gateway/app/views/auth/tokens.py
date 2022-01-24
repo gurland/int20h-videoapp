@@ -10,7 +10,7 @@ from flask_jwt_extended import get_jwt_identity
 
 
 blp = Blueprint(
-    'tokens', __name__, url_prefix='/api/auth/tokens',
+    'tokens', __name__, url_prefix='/auth/tokens',
     description='Operations to get auth tokens and create new users'
 )
 
