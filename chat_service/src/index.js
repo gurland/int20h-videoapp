@@ -8,7 +8,6 @@ require("./dbconnection");
 peers = {};
 
 const removeParticipantFromRoom = (roomId, participantId) => {
-  try {
   const options = {
     hostname: API_HOST,
     port: API_PORT,
@@ -19,18 +18,12 @@ const removeParticipantFromRoom = (roomId, participantId) => {
       'Authorization': 'Bearer ' + "qwe"
     }
   }
-  } catch (e) {
-    console.log(e)
-    console.log(e)
-    console.log(e)
-  }
 
   console.log("DELETE PARTICIPANT OPTIONS")
   console.log(options)
 
   let req = http.request(options, res => {
     console.log("Delete participant " + participantId + " from room: " + roomId + ". Status code: " + res.statusCode)
-
   })
 
   req.on('error', error => {
